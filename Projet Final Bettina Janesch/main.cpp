@@ -22,9 +22,13 @@ void main(void)
 		switch (OptionMenu)
 		{
 		case '1':
-			cout << "hello";
 			break;
 		case '2':
+			//string NomClient;
+			//Client_s NouveauClient;
+			//getline(cin, NomClient);
+			//transform string en tab char
+
 			break;
 		case '3':
 			break;
