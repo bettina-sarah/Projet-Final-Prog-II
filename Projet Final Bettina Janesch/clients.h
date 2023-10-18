@@ -9,6 +9,8 @@ const string NOM_FICHIER_CLIENTS = "C:\\Users\\1649508\\source\\repos\\Projet-Fi
 
 void NouveauClient(string Nom, string Telephone, string Addresse);
 
-void AfficherClients();
+void RechercherDossierClient();
+
+void AfficherDossierClient(int IDClientRecherche);
 
 #endif

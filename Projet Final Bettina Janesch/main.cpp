@@ -15,6 +15,7 @@ void main(void)
 	string NomClient;
 	string NumeroTelephone;
 	string Addresse;
+	int IDClient;
 	do
 	{
 		cout << "\t********\n";
@@ -42,7 +43,10 @@ void main(void)
 			system("cls");
 			break;
 		case '3':
-			AfficherClients();
+			cout << "\n\n\n\nEntrez le numéro du client à afficher: ";
+			cin >> IDClient;
+			IDClient = _getche();
+			AfficherDossierClient(IDClient);
 			break;
 		case '4':
 			break;
