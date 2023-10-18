@@ -2,6 +2,7 @@
 #include <string>
 #include <conio.h> //getch
 #include <stdlib.h> //system cls
+#include "clients.h" // pour les prototypes de fonc
 
 using namespace std;
 
@@ -34,23 +35,14 @@ void main(void)
 			getline(cin, NumeroTelephone);
 			cout << "\nEntrez l'adresse du client: ";
 			getline(cin, Addresse);
-			//Client_s NouveauClient;
+			NouveauClient(NomClient, NumeroTelephone, Addresse);
+
 			cout << "Client ajouté avec succès.\nAppuyez sur une touche pour continuer...";
 			OptionMenu = _getche();
 			system("cls");
-			
-			//transform string en tab char
-			//int IDClient;
-			//char NomClient[MAX_CHAR];
-			//char NumeroTelephone[10];
-			//char Adresse[MAX_CHAR];
-			//Date_s DateInscription;
-			//int NumeroLivresPretes; // max 3
-			//LivresPretes_s Livres[3];
-
-
 			break;
 		case '3':
+			AfficherClients();
 			break;
 		case '4':
 			break;
