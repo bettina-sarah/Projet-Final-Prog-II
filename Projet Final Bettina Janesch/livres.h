@@ -5,6 +5,6 @@
 
 extern const string NOM_FICHIER_LIVRES = "C:\\Users\\1649508\\source\\repos\\Projet Final Bettina Janesch\\Projet Final Bettina Janesch\\fichiers\\libres.bin";
 
-static const int MAX_CHAR = 125;
+static const int MAX_CHAR = 125; // ifndef - declaré 2x ok
 
 #endif

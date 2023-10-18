@@ -7,4 +7,6 @@ static const int MAX_CHAR = 125; //privé: dans un header. possiblement livres.h 
 
 extern const string NOM_FICHIER_CLIENTS = "C:\\Users\\1649508\\source\\repos\\Projet Final Bettina Janesch\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
 
+void NouveauClient();
+
 #endif

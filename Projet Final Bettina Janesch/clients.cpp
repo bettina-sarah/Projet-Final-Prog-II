@@ -1,5 +1,6 @@
 #include <iostream>
 #include "clients.h"
+#include <fstream>
 
 using namespace std;
 
@@ -21,3 +22,9 @@ struct Client_s
 	int NumeroLivresPretes; // max 3
 	LivresPretes_s Livres[3];
 };
+
+void NouveauClient()
+{
+
+
+}

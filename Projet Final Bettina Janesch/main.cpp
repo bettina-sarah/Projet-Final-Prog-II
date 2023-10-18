@@ -11,23 +11,43 @@ void main(void)
 {
 	setlocale(LC_CTYPE, "fr-CA");
 	int OptionMenu;
+	string NomClient;
+	string NumeroTelephone;
+	string Addresse;
 	do
 	{
 		cout << "\t********\n";
 		cout << Bibliotheque;
 		cout << "\n\t********\n";
 		cout << "\n\n****** MENU ******\n\t1. Nouveau livre\n\t2. Nouveau client\n\t3. Dossier du client\n\t4. Location de livre"
-			"\n\t5. Retour des livres\n\t6. Liste des livres prêtés\n\t7. Liste des clients en retard\n\t8. Quitter";
+			"\n\t5. Retour des livres\n\t6. Liste des livres prêtés\n\t7. Liste des clients en retard\n\t8. Quitter\n\n";
 		OptionMenu = _getche();
-		switch (OptionMenu)
+		switch(OptionMenu)
 		{
 		case '1':
 			break;
 		case '2':
-			//string NomClient;
+			
+			cout << "\n\n\n\nEntrez le nom complet du client: ";
+			getline(cin, NomClient);
+			cout << "\nEntrez le numéro de téléphone du client: ";
+			getline(cin, NumeroTelephone);
+			cout << "\nEntrez l'adresse du client: ";
+			getline(cin, Addresse);
 			//Client_s NouveauClient;
-			//getline(cin, NomClient);
+			cout << "Client ajouté avec succès.\nAppuyez sur une touche pour continuer...";
+			OptionMenu = _getche();
+			system("cls");
+			
 			//transform string en tab char
+			//int IDClient;
+			//char NomClient[MAX_CHAR];
+			//char NumeroTelephone[10];
+			//char Adresse[MAX_CHAR];
+			//Date_s DateInscription;
+			//int NumeroLivresPretes; // max 3
+			//LivresPretes_s Livres[3];
+
 
 			break;
 		case '3':
