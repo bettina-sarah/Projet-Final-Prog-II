@@ -1,127 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include <iostream>
 #include "clients.h"
 #include "utils.h"
@@ -130,23 +6,23 @@
 
 using namespace std;
 
-struct LivresPretes_s
-{
-	int NumeroLivre;
-	Date_s Maintenant;
-	Date_s Retour;
-};
+//struct LivresPretes_s
+//{
+//	int NumeroLivre;
+//	Date_s Maintenant;
+//	Date_s Retour;
+//};
 
-struct Client_s
-{
-	int IDClient;
-	char NomClient[MAX_CHAR];
-	char NumeroTelephone[10];
-	char Adresse[MAX_CHAR];
-	Date_s DateInscription;
-	int NumeroLivresPretes; // max 3
-	LivresPretes_s Livres[3];
-};
+//struct Client_s
+//{
+//	int IDClient;
+//	char NomClient[MAX_CHAR];
+//	char NumeroTelephone[10];
+//	char Adresse[MAX_CHAR];
+//	Date_s DateInscription;
+//	int NumeroLivresPretes; // max 3
+//	LivresPretes_s Livres[3];
+//};
 
 void NouveauClient(string Nom, string Telephone, string Addresse)
 {
@@ -221,36 +97,37 @@ Client_s RechercherDossierClient(int IDClientRecherche)
 	}
 
 	Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
-	while (!Fichier.eof())
-	{
-	Fichier.seekg()
 	
-		Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
+	while (Fichier.eof())
+	{
+		if (ClientTrouve.IDClient == IDClientRecherche)
+		{
+			Fichier.seekg(sizeof(Client_s) * ClientTrouve.IDClient, ios::beg);
+			Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
+			return ClientTrouve;
+		}
+		else if (ClientTrouve.IDClient != IDClientRecherche)
+		{
+			cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
+		}
+			//Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 	}
 
 	Fichier.close();
-	return ClientTrouve;
 
 }
 
 
 void AfficherDossierClient(int IDClientRecherche) // pas bon faut quil loop sur rechercherclient
 {
-
-	Client_s LireClient = RechercherDossierClient(IDClientRecherche);
-
-	
-	//if(IDCLIENT invalide)
-	cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
+	Client_s LireClient;
+	LireClient = RechercherDossierClient(IDClientRecherche);
 
 	cout << "\n\n\n+++ DOSSIER DU CLIENT +++\n------------\n";
 
-	
 		cout << "\nID Client: " << LireClient.IDClient << "\nNom client: " << LireClient.NomClient << "\nNuméro téléphone: " << LireClient.NumeroTelephone << "\nAddresse: " << LireClient.Adresse;
 		cout << "\nDate inscription: " << LireClient.DateInscription.Annee << "-" << LireClient.DateInscription.Mois << "-" << LireClient.DateInscription.Jour;
 		cout << "\nNombre de livres pretés: " << LireClient.NumeroLivresPretes;
-		
-	
 
 }
 

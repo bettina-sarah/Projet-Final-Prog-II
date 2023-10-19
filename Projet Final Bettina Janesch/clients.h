@@ -5,9 +5,29 @@
 
 static const int MAX_CHAR = 125; //privé: dans un header. possiblement livres.h aussi
 
-const string NOM_FICHIER_CLIENTS = "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
+struct LivresPretes_s
+{
+	int NumeroLivre;
+	Date_s Maintenant;
+	Date_s Retour;
+};
 
-//"C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
+struct Client_s
+{
+	int IDClient;
+	char NomClient[MAX_CHAR];
+	char NumeroTelephone[10];
+	char Adresse[MAX_CHAR];
+	Date_s DateInscription;
+	int NumeroLivresPretes; // max 3
+	LivresPretes_s Livres[3];
+};
+
+
+const string NOM_FICHIER_CLIENTS = "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
+
+//maison: "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
+
 
 void NouveauClient(string Nom, string Telephone, string Addresse);
 
