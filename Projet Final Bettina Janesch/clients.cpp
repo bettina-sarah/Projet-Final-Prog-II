@@ -1,3 +1,127 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include <iostream>
 #include "clients.h"
 #include "utils.h"
@@ -82,19 +206,12 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 
 }
 
-void RechercherDossierClient()
+Client_s RechercherDossierClient(int IDClientRecherche)
 {
-
-
-}
-
-
-void AfficherDossierClient(int IDClientRecherche) // pas bon faut quil loop sur rechercherclient
-{
+	Client_s ClientTrouve;
 
 	fstream Fichier;
 	string CheminFichier = NOM_FICHIER_CLIENTS;
-	Client_s LireClient;
 
 	Fichier.open(CheminFichier, ios::in | ios::binary);
 
@@ -103,21 +220,37 @@ void AfficherDossierClient(int IDClientRecherche) // pas bon faut quil loop sur 
 		exit(EXIT_FAILURE);
 	}
 
+	Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
+	while (!Fichier.eof())
+	{
+	Fichier.seekg()
+	
+		Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
+	}
+
+	Fichier.close();
+	return ClientTrouve;
+
+}
+
+
+void AfficherDossierClient(int IDClientRecherche) // pas bon faut quil loop sur rechercherclient
+{
+
+	Client_s LireClient = RechercherDossierClient(IDClientRecherche);
+
+	
 	//if(IDCLIENT invalide)
 	cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
 
 	cout << "\n\n\n+++ DOSSIER DU CLIENT +++\n------------\n";
 
-	Fichier.read((char*)&LireClient, sizeof(Client_s));
-	while (!Fichier.eof())
-	{
+	
 		cout << "\nID Client: " << LireClient.IDClient << "\nNom client: " << LireClient.NomClient << "\nNuméro téléphone: " << LireClient.NumeroTelephone << "\nAddresse: " << LireClient.Adresse;
 		cout << "\nDate inscription: " << LireClient.DateInscription.Annee << "-" << LireClient.DateInscription.Mois << "-" << LireClient.DateInscription.Jour;
 		cout << "\nNombre de livres pretés: " << LireClient.NumeroLivresPretes;
 		
-		Fichier.read((char*)&LireClient, sizeof(Client_s));
-	}
+	
 
-	Fichier.close();
 }
 
