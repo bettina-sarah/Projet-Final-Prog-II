@@ -11,7 +11,7 @@ const string NOM_FICHIER_CLIENTS = "C:\\Users\\betti\\source\\repos\\Projet-Fina
 
 void NouveauClient(string Nom, string Telephone, string Addresse);
 
-void RechercherDossierClient();
+Client_s RechercherDossierClient(int IDClientRecherche);
 
 void AfficherDossierClient(int IDClientRecherche);
 
