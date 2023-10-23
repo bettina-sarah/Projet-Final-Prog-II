@@ -20,6 +20,8 @@ void main(void)
 	string Addresse;
 	int IDClient;
 	int IDLivre;
+	int IDLivreALouer;
+	int IDClientLoueur;
 	do
 	{
 		cout << "\t********\n";
@@ -63,6 +65,12 @@ void main(void)
 			//system("cls");
 			break;
 		case '4':
+			cout << "\n\n\n\nEntrez le numéro du client qui loue le livre: ";
+			cin >> IDClientLoueur;
+			cout << "\nEntrez le numéro du livre à preter: ";
+			cin >> IDLivreALouer;
+			Location(IDLivreALouer, IDClientLoueur);
+			cout << "Pret du livre enregistré.\nAppuyez sur une touche pour continuer...";
 			break;
 		case '5':
 			break;

@@ -119,3 +119,41 @@ void AfficherLivre(int& IDLivreRecherche)
 	}
 
 }
+
+void MettreAJourLivre(int& IDLivreRecherche) // A FAIRE
+{
+	Livre_s LivreALouer;
+	fstream Fichier;
+	string CheminFichierLivres = NOM_FICHIER_LIVRES;
+
+	LivreALouer = RechercherLivre(IDLivreRecherche);
+
+	Fichier.open(CheminFichierLivres, ios::in | ios::binary);
+
+	if (Fichier.fail()) {
+		cout << "Erreur ouverture !!";
+		exit(EXIT_FAILURE);
+	}
+
+	Fichier.read((char*)&LivreALouer, sizeof(Livre_s));
+
+	if (LivreALouer.IDLivre == IDLivreRecherche)
+	{
+		Fichier.seekp(sizeof(Livre_s) * LivreALouer.IDLivre, ios::beg);
+		LivreALouer.EtatPret = true;
+		Fichier.write((char*)&LivreALouer, sizeof(Livre_s));
+
+		Fichier.close();
+	}
+
+	else if (LivreALouer.IDLivre < IDLivreRecherche || LivreALouer.IDLivre != IDLivreRecherche)
+	{
+		cout << "Numéro de livre invalide.\nAppuyez sur une touche pour continuer...";
+	}
+}
+
+void ListeDesLivresPretes()
+{
+
+
+}

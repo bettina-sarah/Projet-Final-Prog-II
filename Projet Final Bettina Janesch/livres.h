@@ -23,6 +23,10 @@ Livre_s RechercherLivre(int& IDLivreRecherche);
 
 void AfficherLivre(int& IDLivreRecherche);
 
+void MettreAJourLivre(int& IDLivreRecherche);
+
+void ListeDesLivresPretes();
+
 
 
 #endif

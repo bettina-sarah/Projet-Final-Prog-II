@@ -1,6 +1,7 @@
 #include <iostream>
 #include "clients.h"
 #include "utils.h"
+#include "livres.h" // pour struct Livre_s et chemin fichier livres
 #include <fstream>
 #include <string>
 
@@ -115,7 +116,6 @@ Client_s RechercherDossierClient(int &IDClientRecherche)
 
 }
 
-
 void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur rechercherclient
 {
 	Client_s LireClient;
@@ -137,9 +137,49 @@ void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur
 
 }
 
-void MettreAJourClient(int& IDClientRecherche) // A FAIRE
+void MettreAJourClient(int& IDClientRecherche, int &IDLivreRecherche) // A FAIRE
 {
+	Client_s ClientLoueur;
+	fstream Fichier;
 
+	ClientLoueur = RechercherDossierClient(IDClientRecherche);
+
+	// modifier client
+
+	string CheminFichierClient = NOM_FICHIER_CLIENTS;
+
+	Fichier.open(CheminFichierClient, ios::in | ios::out | ios::binary);
+
+	if (Fichier.fail()) {
+		cout << "Erreur ouverture !!";
+		exit(EXIT_FAILURE);
+	}
+
+	Fichier.read((char*)&ClientLoueur, sizeof(Client_s));
+
+	if (ClientLoueur.IDClient == IDClientRecherche)
+	{
+		Fichier.seekp(sizeof(Client_s) * ClientLoueur.IDClient, ios::beg);
+
+
+		if (ClientLoueur.NumeroLivresPretes < 3)
+		{
+			// 1. modifier nombre de livres pretes
+			ClientLoueur.NumeroLivresPretes++;
+			//2. Numero livre loué + date aujourdhui + date retour
+			ClientLoueur.Livres->NumeroLivre = IDLivreRecherche;
+			ClientLoueur.Livres->Maintenant = Aujourdhui();
+			ClientLoueur.Livres->Retour = AjouterJours(15, ClientLoueur.Livres->Maintenant);
+			// maintenant push struct dans fichier
+			Fichier.write((char*)&ClientLoueur, sizeof(Client_s));
+		}
+
+		else if (ClientLoueur.NumeroLivresPretes > 3)
+		{
+			cout << "Maximum de locations (3) atteint, location de ce livre non permise.\nAppuyez sur une touche pour continuer.";
+		}
+	}
+	Fichier.close();
 
 } 
 
@@ -148,3 +188,53 @@ void ListeDesClientsEnRetard() // A FAIRE
 
 
 } 
+
+// Fonctions locations/retours/retards 
+
+void Location(int& IDLivreALouer, int& IDClientLoueur)
+{
+	Client_s ClientLoueur;
+	Livre_s LivreALouer;
+	fstream Fichier;
+
+	LivreALouer = RechercherLivre(IDLivreALouer);
+
+	//!! modifier livre et client fonc
+
+
+
+	// si client ou livre sont invalides:
+
+	if (ClientLoueur.IDClient < IDClientLoueur || ClientLoueur.IDClient != IDClientLoueur)
+	{
+		cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
+	}
+
+	else if (LivreALouer.IDLivre < IDLivreALouer || LivreALouer.IDLivre != IDLivreALouer)
+	{
+		cout << "Numéro de livre invalide.\nAppuyez sur une touche pour continuer...";
+	}
+
+
+	// modifier livre
+
+	string CheminFichierLivres = NOM_FICHIER_LIVRES;
+
+	Fichier.open(CheminFichierLivres, ios::in | ios::binary);
+
+	if (Fichier.fail()) {
+		cout << "Erreur ouverture !!";
+		exit(EXIT_FAILURE);
+	}
+
+	Fichier.read((char*)&LivreALouer, sizeof(Livre_s));
+
+	if (LivreALouer.IDLivre == IDLivreALouer)
+	{
+		Fichier.seekp(sizeof(Livre_s) * LivreALouer.IDLivre, ios::beg);
+		LivreALouer.EtatPret = true;
+		Fichier.write((char*)&LivreALouer, sizeof(Livre_s));
+
+		Fichier.close();
+	}
+}

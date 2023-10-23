@@ -41,4 +41,6 @@ void MettreAJourClient(int& IDClientRecherche);
 
 void ListeDesClientsEnRetard();
 
+void Location(int &IDLivreALouer, int &IDClientLoueur);
+
 #endif
