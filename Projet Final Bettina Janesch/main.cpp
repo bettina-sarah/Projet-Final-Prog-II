@@ -47,6 +47,7 @@ void main(void)
 			cin >> IDClient;
 			IDClient = _getche();
 			AfficherDossierClient(IDClient);
+			//system("cls");
 			break;
 		case '4':
 			break;

@@ -98,7 +98,7 @@ Client_s RechercherDossierClient(int IDClientRecherche)
 
 	Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 	
-	while (Fichier.eof())
+	while (!Fichier.eof())
 	{
 		if (ClientTrouve.IDClient == IDClientRecherche)
 		{
@@ -106,11 +106,9 @@ Client_s RechercherDossierClient(int IDClientRecherche)
 			Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 			return ClientTrouve;
 		}
-		else if (ClientTrouve.IDClient != IDClientRecherche)
-		{
-			cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
-		}
-			//Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
+
+
+		Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 	}
 
 	Fichier.close();
@@ -123,11 +121,19 @@ void AfficherDossierClient(int IDClientRecherche) // pas bon faut quil loop sur 
 	Client_s LireClient;
 	LireClient = RechercherDossierClient(IDClientRecherche);
 
-	cout << "\n\n\n+++ DOSSIER DU CLIENT +++\n------------\n";
+	if (LireClient.IDClient == IDClientRecherche)
+	{
+		cout << "\n\n\n+++ DOSSIER DU CLIENT +++\n------------\n";
 
 		cout << "\nID Client: " << LireClient.IDClient << "\nNom client: " << LireClient.NomClient << "\nNuméro téléphone: " << LireClient.NumeroTelephone << "\nAddresse: " << LireClient.Adresse;
 		cout << "\nDate inscription: " << LireClient.DateInscription.Annee << "-" << LireClient.DateInscription.Mois << "-" << LireClient.DateInscription.Jour;
 		cout << "\nNombre de livres pretés: " << LireClient.NumeroLivresPretes;
+	}
+
+	else if (LireClient.IDClient < IDClientRecherche || LireClient.IDClient != IDClientRecherche)
+	{
+		cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
+	}
 
 }
 
