@@ -137,9 +137,14 @@ void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur
 
 }
 
-void MettreAJourClient(int& IDClientRecherche)
+void MettreAJourClient(int& IDClientRecherche) // A FAIRE
 {
 
 
-}
+} 
 
+void ListeDesClientsEnRetard() // A FAIRE
+{
+
+
+} 

@@ -24,11 +24,11 @@ struct Client_s
 };
 
 
-const string NOM_FICHIER_CLIENTS = "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
+const string NOM_FICHIER_CLIENTS = "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
 
-//maison: 
+//maison: "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
 
-//ecole: "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
+//ecole: 
 
 
 void NouveauClient(string Nom, string Telephone, string Addresse);
@@ -38,5 +38,7 @@ Client_s RechercherDossierClient(int &IDClientRecherche);
 void AfficherDossierClient(int &IDClientRecherche);
 
 void MettreAJourClient(int& IDClientRecherche);
+
+void ListeDesClientsEnRetard();
 
 #endif

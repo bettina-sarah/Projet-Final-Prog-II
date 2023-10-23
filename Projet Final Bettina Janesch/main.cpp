@@ -2,7 +2,8 @@
 #include <string>
 #include <conio.h> //getch
 #include <stdlib.h> //system cls
-#include "clients.h" // pour les prototypes de fonc
+#include "clients.h" // prototypes client
+#include "livres.h" // prototypes livres
 
 using namespace std;
 
@@ -12,10 +13,13 @@ void main(void)
 {
 	setlocale(LC_CTYPE, "fr-CA");
 	int OptionMenu;
+	string NomLivre;
+	string NomAuteur;
 	string NomClient;
 	string NumeroTelephone;
 	string Addresse;
 	int IDClient;
+	int IDLivre;
 	do
 	{
 		cout << "\t********\n";
@@ -23,10 +27,19 @@ void main(void)
 		cout << "\n\t********\n";
 		cout << "\n\n****** MENU ******\n\t1. Nouveau livre\n\t2. Nouveau client\n\t3. Dossier du client\n\t4. Location de livre"
 			"\n\t5. Retour des livres\n\t6. Liste des livres prêtés\n\t7. Liste des clients en retard\n\t8. Quitter\n\n";
+		cout << "9. Afficher Livre";// pour tester
 		OptionMenu = _getche();
 		switch(OptionMenu)
 		{
 		case '1':
+			cout << "\n\n\n\nEntrez le titre du livre: ";
+			getline(cin, NomLivre);
+			cout << "\nEntrez l'auteur/autrice du livre: ";
+			getline(cin, NomAuteur);
+			NouveauLivre(NomLivre, NomAuteur);
+			cout << "Livre ajouté avec succès.\nAppuyez sur une touche pour continuer...";
+			OptionMenu = _getche();
+			system("cls");
 			break;
 		case '2':
 			
@@ -45,7 +58,7 @@ void main(void)
 		case '3':
 			cout << "\n\n\n\nEntrez le numéro du client à afficher: ";
 			cin >> IDClient;
-			IDClient = _getche();
+			//IDClient = _getche();
 			AfficherDossierClient(IDClient);
 			//system("cls");
 			break;
@@ -61,7 +74,12 @@ void main(void)
 			system("cls");
 			_getch();
 			break;
-
+		case '9':
+			cout << "\n\n\n\nEntrez le numéro du livre à afficher: "; // option menu pour tester seulement
+			cin >> IDLivre;
+			//IDLivre = _getche();
+			AfficherLivre(IDLivre);
+			break;
 		} 
 	}
 	while (OptionMenu != '8');
