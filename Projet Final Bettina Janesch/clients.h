@@ -37,10 +37,10 @@ Client_s RechercherDossierClient(int &IDClientRecherche);
 
 void AfficherDossierClient(int &IDClientRecherche);
 
-void MettreAJourClient(int& IDClientRecherche);
+void MettreAJourClient(int& IDClientRecherche, int& IDLivreRecherche);
 
 void ListeDesClientsEnRetard();
 
-void Location(int &IDLivreALouer, int &IDClientLoueur);
+void Location(int& IDClientLoueur, int& IDLivreALouer);
 
 #endif
