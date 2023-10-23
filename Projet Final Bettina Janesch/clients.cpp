@@ -82,7 +82,7 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 
 }
 
-Client_s RechercherDossierClient(int IDClientRecherche)
+Client_s RechercherDossierClient(int &IDClientRecherche)
 {
 	Client_s ClientTrouve;
 
@@ -116,7 +116,7 @@ Client_s RechercherDossierClient(int IDClientRecherche)
 }
 
 
-void AfficherDossierClient(int IDClientRecherche) // pas bon faut quil loop sur rechercherclient
+void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur rechercherclient
 {
 	Client_s LireClient;
 	LireClient = RechercherDossierClient(IDClientRecherche);
@@ -134,6 +134,12 @@ void AfficherDossierClient(int IDClientRecherche) // pas bon faut quil loop sur 
 	{
 		cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
 	}
+
+}
+
+void MettreAJourClient(int& IDClientRecherche)
+{
+
 
 }
 
