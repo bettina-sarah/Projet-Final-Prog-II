@@ -107,9 +107,12 @@ Client_s RechercherDossierClient(int &IDClientRecherche)
 			Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 			return ClientTrouve;
 		}
-
-
 		Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
+	}
+
+	if (ClientTrouve.IDClient < IDClientRecherche || ClientTrouve.IDClient != IDClientRecherche)
+	{
+		cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
 	}
 
 	Fichier.close();
@@ -176,11 +179,6 @@ void MettreAJourClient(int& IDClientRecherche, int &IDLivreRecherche) // A FAIRE
 		}
 	}
 
-	else if (ClientLoueur.IDClient < IDClientRecherche || ClientLoueur.IDClient != IDClientRecherche)
-	{
-		cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
-	}
-
 	Fichier.close();
 
 } 
@@ -199,9 +197,8 @@ void Location(int& IDClientLoueur, int& IDLivreALouer)
 	Livre_s LivreALouer;
 	fstream Fichier;
 
-	LivreALouer = RechercherLivre(IDLivreALouer);
-
 	MettreAJourClient(IDClientLoueur, IDLivreALouer);
 	MettreAJourLivre(IDLivreALouer);
+	cout << "Pret du livre enregistré.";
 
 }

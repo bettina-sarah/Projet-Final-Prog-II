@@ -128,25 +128,25 @@ void MettreAJourLivre(int& IDLivreRecherche) // A FAIRE
 
 	LivreALouer = RechercherLivre(IDLivreRecherche);
 
-	Fichier.open(CheminFichierLivres, ios::in | ios::binary);
+	Fichier.open(CheminFichierLivres, ios::in | ios::out | ios::binary);
 
 	if (Fichier.fail()) {
 		cout << "Erreur ouverture !!";
 		exit(EXIT_FAILURE);
 	}
 
+	Fichier.seekg(sizeof(Livre_s) * LivreALouer.IDLivre, ios::beg);
 	Fichier.read((char*)&LivreALouer, sizeof(Livre_s));
 
-	if (LivreALouer.IDLivre == IDLivreRecherche)
-	{
-		Fichier.seekp(sizeof(Livre_s) * LivreALouer.IDLivre, ios::beg);
-		LivreALouer.EtatPret = true;
-		Fichier.write((char*)&LivreALouer, sizeof(Livre_s));
+	LivreALouer.EtatPret = true;
 
-		Fichier.close();
-	}
+	Fichier.seekp(sizeof(Livre_s) * LivreALouer.IDLivre, ios::beg);
+	Fichier.write((char*)&LivreALouer, sizeof(Livre_s));
 
-	else if (LivreALouer.IDLivre < IDLivreRecherche || LivreALouer.IDLivre != IDLivreRecherche)
+	Fichier.close();
+
+
+	if (LivreALouer.IDLivre < IDLivreRecherche || LivreALouer.IDLivre != IDLivreRecherche)
 	{
 		cout << "Numéro de livre invalide.\nAppuyez sur une touche pour continuer...";
 	}

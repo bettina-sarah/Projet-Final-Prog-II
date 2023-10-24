@@ -69,8 +69,8 @@ void main(void)
 			cin >> IDClientLoueur;
 			cout << "\nEntrez le numéro du livre à preter: ";
 			cin >> IDLivreALouer;
-			Location(IDLivreALouer, IDClientLoueur);
-			cout << "Pret du livre enregistré.\nAppuyez sur une touche pour continuer...";
+			Location(IDClientLoueur, IDLivreALouer);
+			cout << "\nAppuyez sur une touche pour continuer...";
 			break;
 		case '5':
 			break;

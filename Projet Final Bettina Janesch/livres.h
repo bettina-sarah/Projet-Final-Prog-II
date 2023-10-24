@@ -3,9 +3,11 @@
 
 #include "utils.h" // String en char, ajd, ajout jours, nombre jours
 
-const string NOM_FICHIER_LIVRES = "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\livres.bin";
+const string NOM_FICHIER_LIVRES = "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\livres.bin";
 
-//maison: "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\livres.bin";
+//maison: 
+
+// ecole: "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\livres.bin";
 
 static const int MAX_CHAR_LIVRES = 125;
 
