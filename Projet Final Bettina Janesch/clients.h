@@ -3,7 +3,9 @@
 
 #include "utils.h" // String en char, ajd, ajout jours, nombre jours
 
-static const int MAX_CHAR = 125; //privé: dans un header. possiblement livres.h aussi
+const int MAX_CHAR = 125;//privé: dans un header. possiblement livres.h aussi
+
+extern const string NOM_FICHIER_CLIENTS;
 
 struct LivresPretes_s
 {
@@ -23,24 +25,18 @@ struct Client_s
 	LivresPretes_s Livres[3];
 };
 
-
-const string NOM_FICHIER_CLIENTS = "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
-
-//maison: 
-
-//ecole: "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
-
-
 void NouveauClient(string Nom, string Telephone, string Addresse);
 
-Client_s RechercherDossierClient(int &IDClientRecherche);
+static Client_s RechercherDossierClient(int &IDClientRecherche);
 
 void AfficherDossierClient(int &IDClientRecherche);
 
-void MettreAJourClient(int& IDClientRecherche, int& IDLivreRecherche);
+static void MettreAJourClient(Client_s ClientLoueur, int& IDClientRecherche);
 
 void ListeDesClientsEnRetard();
 
 void Location(int& IDClientLoueur, int& IDLivreALouer);
+
+void Retour();
 
 #endif

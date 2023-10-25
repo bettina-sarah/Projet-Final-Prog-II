@@ -5,26 +5,23 @@
 
 using namespace std;
 
-// location / prêt d’un livre implique des données pour le client ET pour le livre!!!!
+extern const string NOM_FICHIER_LIVRES = ".\\fichiers\\livres.bin";
 
-//struct Livre_s
-//{
-//	int IDLivre; // a zero
-//	char Titre[MAX_CHAR_LIVRES];
-//	char Auteur[MAX_CHAR_LIVRES];
-//	bool EtatPret;
-//};
+//maison: "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\livres.bin";
+
+// ecole: "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\livres.bin";
+
+// location / prêt d’un livre implique des données pour le client ET pour le livre!!!!
 
 void NouveauLivre(string Titre, string Auteur)
 {
 	fstream Fichier;
-	string CheminFichier = NOM_FICHIER_LIVRES;
 	static int IDNouveauLivre = 0;
 	Livre_s NouveauLivre;
 	char CharTitre[MAX_CHAR_LIVRES];
 	char CharAuteur[MAX_CHAR_LIVRES];
 
-	Fichier.open(CheminFichier, ios::app | ios::binary);
+	Fichier.open(NOM_FICHIER_LIVRES, ios::app | ios::binary);
 
 	if (Fichier.fail()) {
 		cout << "Erreur ouverture !!";
@@ -63,11 +60,8 @@ void NouveauLivre(string Titre, string Auteur)
 Livre_s RechercherLivre(int &IDLivreRecherche)
 {
 	Livre_s LivreTrouve;
-
 	fstream Fichier;
-	string CheminFichier = NOM_FICHIER_LIVRES;
-
-	Fichier.open(CheminFichier, ios::in | ios::binary);
+	Fichier.open(NOM_FICHIER_LIVRES, ios::in | ios::binary);
 
 	if (Fichier.fail()) {
 		cout << "Erreur ouverture !!";
@@ -86,6 +80,11 @@ Livre_s RechercherLivre(int &IDLivreRecherche)
 		}
 
 		Fichier.read((char*)&LivreTrouve, sizeof(Livre_s));
+	}
+
+	if (LivreTrouve.IDLivre < IDLivreRecherche || LivreTrouve.IDLivre != IDLivreRecherche)
+	{
+		cout << "Numéro de livre invalide.\nAppuyez sur une touche pour continuer...";
 	}
 
 	Fichier.close();
@@ -120,36 +119,22 @@ void AfficherLivre(int& IDLivreRecherche)
 
 }
 
-void MettreAJourLivre(int& IDLivreRecherche) // A FAIRE
+void MettreAJourLivre(Livre_s LivreALouer, int& IDLivreRecherche)
 {
-	Livre_s LivreALouer;
 	fstream Fichier;
-	string CheminFichierLivres = NOM_FICHIER_LIVRES;
 
-	LivreALouer = RechercherLivre(IDLivreRecherche);
-
-	Fichier.open(CheminFichierLivres, ios::in | ios::out | ios::binary);
+	Fichier.open(NOM_FICHIER_LIVRES, ios::in | ios::out | ios::binary);
 
 	if (Fichier.fail()) {
 		cout << "Erreur ouverture !!";
 		exit(EXIT_FAILURE);
 	}
 
-	Fichier.seekg(sizeof(Livre_s) * LivreALouer.IDLivre, ios::beg);
-	Fichier.read((char*)&LivreALouer, sizeof(Livre_s));
-
-	LivreALouer.EtatPret = true;
-
 	Fichier.seekp(sizeof(Livre_s) * LivreALouer.IDLivre, ios::beg);
 	Fichier.write((char*)&LivreALouer, sizeof(Livre_s));
 
 	Fichier.close();
 
-
-	if (LivreALouer.IDLivre < IDLivreRecherche || LivreALouer.IDLivre != IDLivreRecherche)
-	{
-		cout << "Numéro de livre invalide.\nAppuyez sur une touche pour continuer...";
-	}
 }
 
 void ListeDesLivresPretes()

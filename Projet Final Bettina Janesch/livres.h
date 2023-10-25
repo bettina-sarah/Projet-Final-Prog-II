@@ -3,13 +3,11 @@
 
 #include "utils.h" // String en char, ajd, ajout jours, nombre jours
 
-const string NOM_FICHIER_LIVRES = "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\livres.bin";
+// !! pas de defimition dans .h
 
-//maison: 
+extern const string NOM_FICHIER_LIVRES;
 
-// ecole: "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\livres.bin";
-
-static const int MAX_CHAR_LIVRES = 125;
+const int MAX_CHAR_LIVRES = 125; // static par défaut
 
 struct Livre_s
 {
@@ -25,7 +23,7 @@ Livre_s RechercherLivre(int& IDLivreRecherche);
 
 void AfficherLivre(int& IDLivreRecherche);
 
-void MettreAJourLivre(int& IDLivreRecherche);
+void MettreAJourLivre(Livre_s LivreALouer, int& IDLivreRecherche);
 
 void ListeDesLivresPretes();
 

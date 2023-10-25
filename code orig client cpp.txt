@@ -1,0 +1,65 @@
+void MettreAJourClient(int& IDClientRecherche, int &IDLivreRecherche) // A FAIRE
+{
+	Client_s ClientLoueur;
+	fstream Fichier;
+	string CheminFichierClient = NOM_FICHIER_CLIENTS;
+
+	ClientLoueur = RechercherDossierClient(IDClientRecherche);
+
+	Fichier.open(CheminFichierClient, ios::in | ios::out | ios::binary);
+
+	if (Fichier.fail()) {
+		cout << "Erreur ouverture !!";
+		exit(EXIT_FAILURE);
+	}
+
+	
+	Fichier.read((char*)&ClientLoueur, sizeof(Client_s));
+	if (ClientLoueur.IDClient == IDClientRecherche)
+	{
+		Fichier.seekp(sizeof(Client_s) * ClientLoueur.IDClient, ios::beg);
+
+		if (ClientLoueur.NumeroLivresPretes < 3)
+		{
+			// 1. modifier nombre de livres pretes
+			ClientLoueur.NumeroLivresPretes++;
+			//2. Numero livre loué + date aujourdhui + date retour
+			ClientLoueur.Livres->NumeroLivre = IDLivreRecherche;
+			ClientLoueur.Livres->Maintenant = Aujourdhui();
+			ClientLoueur.Livres->Retour = AjouterJours(15, ClientLoueur.Livres->Maintenant);
+			//3. maintenant push struct dans fichier
+			Fichier.write((char*)&ClientLoueur, sizeof(Client_s));
+			cout << "Pret du livre enregistré.";
+		}
+
+		else if (ClientLoueur.NumeroLivresPretes >= 3)
+		{
+			cout << "Maximum de locations (3) atteint, location de ce livre non permise.";
+		}
+	}
+
+	Fichier.close();
+
+} 
+
+void ListeDesClientsEnRetard() // A FAIRE
+{
+
+
+} 
+
+// Fonctions locations/retours/retards 
+
+void Location(int& IDClientLoueur, int& IDLivreALouer)
+{
+	Client_s ClientLoueur;
+	Livre_s LivreALouer;
+	fstream Fichier;
+
+	MettreAJourClient(IDClientLoueur, IDLivreALouer);
+	MettreAJourLivre(IDLivreALouer);
+
+	!! Mettre a jour (struct client trouve)
+	
+
+}

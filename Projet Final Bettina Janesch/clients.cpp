@@ -7,28 +7,15 @@
 
 using namespace std;
 
-//struct LivresPretes_s
-//{
-//	int NumeroLivre;
-//	Date_s Maintenant;
-//	Date_s Retour;
-//};
+extern const string NOM_FICHIER_CLIENTS = ".\\fichiers\\clients.bin";
 
-//struct Client_s
-//{
-//	int IDClient;
-//	char NomClient[MAX_CHAR];
-//	char NumeroTelephone[10];
-//	char Adresse[MAX_CHAR];
-//	Date_s DateInscription;
-//	int NumeroLivresPretes; // max 3
-//	LivresPretes_s Livres[3];
-//};
+//maison: "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
+
+//ecole: "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
 
 void NouveauClient(string Nom, string Telephone, string Addresse)
 {
 	fstream Fichier;
-	string CheminFichier = NOM_FICHIER_CLIENTS;
 	static int IDNouveauClient = 0;
 	Client_s NouveauClient;
 	char CharNom[MAX_CHAR];
@@ -36,7 +23,7 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 	char CharAddresse[MAX_CHAR];
 
 
-	Fichier.open(CheminFichier, ios::app | ios::binary);
+	Fichier.open(NOM_FICHIER_CLIENTS, ios::app | ios::binary);
 
 	if (Fichier.fail()) {
 		cout << "Erreur ouverture !!";
@@ -83,14 +70,12 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 
 }
 
-Client_s RechercherDossierClient(int &IDClientRecherche)
+static Client_s RechercherDossierClient(int &IDClientRecherche)
 {
 	Client_s ClientTrouve;
 
 	fstream Fichier;
-	string CheminFichier = NOM_FICHIER_CLIENTS;
-
-	Fichier.open(CheminFichier, ios::in | ios::binary);
+	Fichier.open(NOM_FICHIER_CLIENTS, ios::in | ios::binary);
 
 	if (Fichier.fail()) {
 		cout << "Erreur ouverture !!";
@@ -107,6 +92,7 @@ Client_s RechercherDossierClient(int &IDClientRecherche)
 			Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 			return ClientTrouve;
 		}
+
 		Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 	}
 
@@ -132,7 +118,16 @@ void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur
 		cout << "\nDate inscription: " << LireClient.DateInscription.Annee << "-" << LireClient.DateInscription.Mois << "-" << LireClient.DateInscription.Jour;
 		cout << "\nNombre de livres pretés: " << LireClient.NumeroLivresPretes;
 		//test:
-		cout << "\nTEST:\nDate pret: " << LireClient.Livres[0].Maintenant.Annee << LireClient.Livres[0].Maintenant.Mois << LireClient.Livres[0].Maintenant.Jour << "\nDate retour +15: " << LireClient.Livres[0].Retour.Annee << LireClient.Livres[0].Retour.Mois << LireClient.Livres[0].Retour.Jour;
+
+		cout << "\nTEST:\n";
+
+		for (int i = 0; i < 3; i++)
+		{
+			cout << "Date pret : " << LireClient.Livres[i].Maintenant.Annee << LireClient.Livres[i].Maintenant.Mois << LireClient.Livres[i].Maintenant.Jour;
+			cout << "\nDate retour + 15: " << LireClient.Livres[i].Retour.Annee << LireClient.Livres[i].Retour.Mois << LireClient.Livres[i].Retour.Jour << "\nNuméro livre: ";
+			cout << LireClient.Livres[i].NumeroLivre << "\n\n";
+		}
+
 	}
 
 	else if (LireClient.IDClient < IDClientRecherche || LireClient.IDClient != IDClientRecherche)
@@ -142,48 +137,21 @@ void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur
 
 }
 
-void MettreAJourClient(int& IDClientRecherche, int &IDLivreRecherche) // A FAIRE
+static void MettreAJourClient(Client_s ClientLoueur, int &IDClientRecherche)
 {
-	Client_s ClientLoueur;
 	fstream Fichier;
-	string CheminFichierClient = NOM_FICHIER_CLIENTS;
 
-	ClientLoueur = RechercherDossierClient(IDClientRecherche);
-
-	Fichier.open(CheminFichierClient, ios::in | ios::out | ios::binary);
+	Fichier.open(NOM_FICHIER_CLIENTS, ios::in | ios::out | ios::binary); // au lieu de: 
 
 	if (Fichier.fail()) {
 		cout << "Erreur ouverture !!";
 		exit(EXIT_FAILURE);
 	}
 
-	
-	Fichier.read((char*)&ClientLoueur, sizeof(Client_s));
-	if (ClientLoueur.IDClient == IDClientRecherche)
-	{
-		Fichier.seekp(sizeof(Client_s) * ClientLoueur.IDClient, ios::beg);
-
-		if (ClientLoueur.NumeroLivresPretes < 3)
-		{
-			// 1. modifier nombre de livres pretes
-			ClientLoueur.NumeroLivresPretes++;
-			//2. Numero livre loué + date aujourdhui + date retour
-			ClientLoueur.Livres->NumeroLivre = IDLivreRecherche;
-			ClientLoueur.Livres->Maintenant = Aujourdhui();
-			ClientLoueur.Livres->Retour = AjouterJours(15, ClientLoueur.Livres->Maintenant);
-			//3. maintenant push struct dans fichier
-			Fichier.write((char*)&ClientLoueur, sizeof(Client_s));
-			cout << "Pret du livre enregistré.";
-		}
-
-		else if (ClientLoueur.NumeroLivresPretes >= 3)
-		{
-			cout << "Maximum de locations (3) atteint, location de ce livre non permise.";
-		}
-	}
+	Fichier.seekp(sizeof(Client_s) * ClientLoueur.IDClient, ios::beg);
+	Fichier.write((char*)&ClientLoueur, sizeof(Client_s));
 
 	Fichier.close();
-
 } 
 
 void ListeDesClientsEnRetard() // A FAIRE
@@ -198,10 +166,45 @@ void Location(int& IDClientLoueur, int& IDLivreALouer)
 {
 	Client_s ClientLoueur;
 	Livre_s LivreALouer;
-	fstream Fichier;
 
-	MettreAJourClient(IDClientLoueur, IDLivreALouer);
-	MettreAJourLivre(IDLivreALouer);
-	
+	ClientLoueur = RechercherDossierClient(IDClientLoueur);
+	LivreALouer = RechercherLivre(IDLivreALouer);
+
+	if (ClientLoueur.NumeroLivresPretes < 3)
+	{
+		//1. changer infos client
+		//1.1. Numero livre loué + date aujourdhui + date retour
+		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].NumeroLivre = IDLivreALouer;
+		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].Maintenant = Aujourdhui();
+		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].Retour = AjouterJours(15, ClientLoueur.Livres->Maintenant);
+
+			// 1.2 modifier nombre de livres pretes
+		ClientLoueur.NumeroLivresPretes++;
+			
+
+		//2. changer infos livre
+		LivreALouer.EtatPret = true;
+
+		//3. push structs dans les fichiers
+		MettreAJourClient(ClientLoueur, IDClientLoueur);
+		MettreAJourLivre(LivreALouer, IDLivreALouer);
+
+		cout << "Pret du livre enregistré.";
+	}
+
+	else if (ClientLoueur.NumeroLivresPretes >= 3 ) // donné 100 pour eviter d'avoir ce message en cas d'une structure vide du client/invalide
+	{
+		cout << "Maximum de locations (3) atteint, location de ce livre non permise.";
+	}
+}
+
+void Retour()
+{
+
+//On présume qu’un client retourne tous ses livres lors d’un retour.
+//Cette fonction modifiera le nombre de livres prêtés(le mettra à zéro).
+//Si le client est en retard, on retourne le nombre de jours de retard.Vous pouvez calculer le nombre de jours grâce à la fonction NombreJours.
 
 }
+
+
