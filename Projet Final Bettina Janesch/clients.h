@@ -37,6 +37,8 @@ void ListeDesClientsEnRetard();
 
 void Location(int& IDClientLoueur, int& IDLivreALouer);
 
-void Retour();
+void Retour(int& IDClientLoueur);
+
+void MettreClientEnRetard(int Client, int Livre);
 
 #endif

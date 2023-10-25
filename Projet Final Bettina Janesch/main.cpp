@@ -12,7 +12,7 @@ const string Bibliotheque = "Bibliothèque de la MRC St-Clin-de-banlieue";
 void main(void)
 {
 	setlocale(LC_CTYPE, "fr-CA");
-	int OptionMenu;
+	char OptionMenu;
 	string NomLivre;
 	string NomAuteur;
 	string NomClient;
@@ -22,6 +22,7 @@ void main(void)
 	int IDLivre;
 	int IDLivreALouer;
 	int IDClientLoueur;
+	int IDClientRetour;
 	
 	do
 	{
@@ -30,7 +31,7 @@ void main(void)
 		cout << "\n\t********\n";
 		cout << "\n\n****** MENU ******\n\t1. Nouveau livre\n\t2. Nouveau client\n\t3. Dossier du client\n\t4. Location de livre"
 			"\n\t5. Retour des livres\n\t6. Liste des livres prêtés\n\t7. Liste des clients en retard\n\t8. Quitter";
-		cout << "\n9. Afficher Livre (extra)";// pour tester
+		cout << "\n9. Afficher Livre (extra)\n*. Mettre un client en retard";// pour tester
 		OptionMenu = _getche();
 		switch(OptionMenu)
 		{
@@ -74,10 +75,14 @@ void main(void)
 			cout << "\nAppuyez sur une touche pour continuer...";
 			break;
 		case '5':
+			cout << "\n\n\n\nEntrez le numéro du client qui retourne tous ses livres: ";
+			cin >> IDClientRetour;
+			Retour(IDClientRetour);
 			break;
 		case '6':
 			break;
 		case '7':
+			ListeDesClientsEnRetard();
 			break;
 		case '8':
 			system("cls");
@@ -88,6 +93,13 @@ void main(void)
 			cin >> IDLivre;
 			//IDLivre = _getche();
 			AfficherLivre(IDLivre);
+			break;
+		case '*':
+			cout << "\n\n\n\nEntrez le numéro du client à mettre en retard: "; // option menu pour tester seulement
+			cin >> IDClient;
+			cout << "\nEntrez le livre a mettre en retard";
+			cin >> IDLivre;
+			MettreClientEnRetard(IDClient, IDLivre);
 			break;
 		} 
 	}

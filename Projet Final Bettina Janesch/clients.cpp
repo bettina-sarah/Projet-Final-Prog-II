@@ -154,13 +154,44 @@ static void MettreAJourClient(Client_s ClientLoueur, int &IDClientRecherche)
 	Fichier.close();
 } 
 
-void ListeDesClientsEnRetard() // A FAIRE
-{
+// Fonctions locations/retours/retards 
 
+void ListeDesClientsEnRetard() // A REPARER
+{
+	Client_s ClientRetard;
+
+	bool Retard = false;
+
+	for (int i = 0; i < 9; i++) //parcourir tous les clients A REPARER while(eof) sans fonc rechercher et juste parcourir dans fichier a place?
+	{
+		ClientRetard = RechercherDossierClient(i);
+
+		if (NombreJours(ClientRetard.Livres[ClientRetard.NumeroLivresPretes].Retour, Aujourdhui()) >= 1)
+		{
+			Retard = true;
+		}
+
+		for (int i = 0; i < ClientRetard.NumeroLivresPretes; i++) // verifier si une des livres est en retard
+		{
+			if (Retard) // si retard existe  (diff entre date retour et ajd >=1)
+			{
+				cout << "\n\n\n+++ CLIENTS AVEC DES PRETS EN RETARD +++\n------------\n";
+				cout << "Nom (Téléphone)\t\tDate de retour prévue\tJours de retard";
+				cout << "\n-----------------------------------------\n";
+				cout << "\n" << ClientRetard.NomClient << " ( " << ClientRetard.NumeroTelephone << "\t" << ClientRetard.Livres[i].Retour.Jour << "/";
+				cout << ClientRetard.Livres[i].Retour.Mois << "/" << ClientRetard.Livres[i].Retour.Annee << NombreJours(ClientRetard.Livres[i].Retour, Aujourdhui());
+				Retard = false; // juste pour afficher 1 livre seulement
+			}
+
+		}
+
+		
+
+	}
 
 } 
 
-// Fonctions locations/retours/retards 
+
 
 void Location(int& IDClientLoueur, int& IDLivreALouer)
 {
@@ -176,7 +207,7 @@ void Location(int& IDClientLoueur, int& IDLivreALouer)
 		//1.1. Numero livre loué + date aujourdhui + date retour
 		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].NumeroLivre = IDLivreALouer;
 		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].Maintenant = Aujourdhui();
-		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].Retour = AjouterJours(15, ClientLoueur.Livres->Maintenant);
+		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].Retour = AjouterJours(15, Aujourdhui());
 
 			// 1.2 modifier nombre de livres pretes
 		ClientLoueur.NumeroLivresPretes++;
@@ -198,12 +229,59 @@ void Location(int& IDClientLoueur, int& IDLivreALouer)
 	}
 }
 
-void Retour()
+void Retour(int& IDClientLoueur)
 {
+	Client_s ClientLoueur;
+	Livre_s LivreALouer;
 
-//On présume qu’un client retourne tous ses livres lors d’un retour.
-//Cette fonction modifiera le nombre de livres prêtés(le mettra à zéro).
+	ClientLoueur = RechercherDossierClient(IDClientLoueur);
+
+	for (int i = 0; i < ClientLoueur.NumeroLivresPretes; i++)
+	{
+		//1.2 
+		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].NumeroLivre = {};
+		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].Maintenant = {};
+		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].Retour = {};
+
+
+		//2. changer infos livre
+		LivreALouer.EtatPret = false;
+
+		//3. push structs dans les fichiers
+		MettreAJourClient(ClientLoueur, IDClientLoueur);
+		MettreAJourLivre(LivreALouer, ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].NumeroLivre);
+
+	}
+
+	// 1.1 modifier nombre de livres pretes a zero apres le loop
+
+	ClientLoueur.NumeroLivresPretes = 0;
+	MettreAJourClient(ClientLoueur, IDClientLoueur);
+
+
 //Si le client est en retard, on retourne le nombre de jours de retard.Vous pouvez calculer le nombre de jours grâce à la fonction NombreJours.
+//La fonction NombreJours(Date_s Date1, Date_s Date_2) retourne un int qui correspond au nombre de jours de Date2 – Date 1. 
+//Cette fonction est utile pour vérifier le nombre de jours de retard d’un livre.
+}
+
+void MettreClientEnRetard(int Client, int Livre)
+{
+	Client_s ClientRetard;
+	Livre_s LivreRetard;
+
+	ClientRetard = RechercherDossierClient(Client);
+	LivreRetard = RechercherLivre(Livre);
+
+	for (int i = 0; i < ClientRetard.NumeroLivresPretes; i++)
+	{
+		if (ClientRetard.Livres[i].NumeroLivre == Livre)
+		{
+			ClientRetard.Livres[i].Retour.Mois = 9;
+
+			MettreAJourClient(ClientRetard, Client);
+		}
+	}
+
 
 }
 
