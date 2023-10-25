@@ -131,6 +131,8 @@ void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur
 		cout << "\nID Client: " << LireClient.IDClient << "\nNom client: " << LireClient.NomClient << "\nNuméro téléphone: " << LireClient.NumeroTelephone << "\nAddresse: " << LireClient.Adresse;
 		cout << "\nDate inscription: " << LireClient.DateInscription.Annee << "-" << LireClient.DateInscription.Mois << "-" << LireClient.DateInscription.Jour;
 		cout << "\nNombre de livres pretés: " << LireClient.NumeroLivresPretes;
+		//test:
+		cout << "\nTEST:\nDate pret: " << LireClient.Livres[0].Maintenant.Annee << LireClient.Livres[0].Maintenant.Mois << LireClient.Livres[0].Maintenant.Jour << "\nDate retour +15: " << LireClient.Livres[0].Retour.Annee << LireClient.Livres[0].Retour.Mois << LireClient.Livres[0].Retour.Jour;
 	}
 
 	else if (LireClient.IDClient < IDClientRecherche || LireClient.IDClient != IDClientRecherche)
@@ -171,11 +173,12 @@ void MettreAJourClient(int& IDClientRecherche, int &IDLivreRecherche) // A FAIRE
 			ClientLoueur.Livres->Retour = AjouterJours(15, ClientLoueur.Livres->Maintenant);
 			//3. maintenant push struct dans fichier
 			Fichier.write((char*)&ClientLoueur, sizeof(Client_s));
+			cout << "Pret du livre enregistré.";
 		}
 
-		else if (ClientLoueur.NumeroLivresPretes > 3)
+		else if (ClientLoueur.NumeroLivresPretes >= 3)
 		{
-			cout << "Maximum de locations (3) atteint, location de ce livre non permise.\nAppuyez sur une touche pour continuer.";
+			cout << "Maximum de locations (3) atteint, location de ce livre non permise.";
 		}
 	}
 
@@ -199,6 +202,6 @@ void Location(int& IDClientLoueur, int& IDLivreALouer)
 
 	MettreAJourClient(IDClientLoueur, IDLivreALouer);
 	MettreAJourLivre(IDLivreALouer);
-	cout << "Pret du livre enregistré.";
+	
 
 }

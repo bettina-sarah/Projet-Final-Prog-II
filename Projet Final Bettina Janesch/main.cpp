@@ -22,14 +22,15 @@ void main(void)
 	int IDLivre;
 	int IDLivreALouer;
 	int IDClientLoueur;
+	
 	do
 	{
 		cout << "\t********\n";
 		cout << Bibliotheque;
 		cout << "\n\t********\n";
 		cout << "\n\n****** MENU ******\n\t1. Nouveau livre\n\t2. Nouveau client\n\t3. Dossier du client\n\t4. Location de livre"
-			"\n\t5. Retour des livres\n\t6. Liste des livres prêtés\n\t7. Liste des clients en retard\n\t8. Quitter\n\n";
-		cout << "9. Afficher Livre";// pour tester
+			"\n\t5. Retour des livres\n\t6. Liste des livres prêtés\n\t7. Liste des clients en retard\n\t8. Quitter";
+		cout << "\n9. Afficher Livre (extra)";// pour tester
 		OptionMenu = _getche();
 		switch(OptionMenu)
 		{
