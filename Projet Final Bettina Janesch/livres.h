@@ -19,6 +19,8 @@ struct Livre_s
 
 void NouveauLivre(string Titre, string Auteur);
 
+static int CompterLivres();
+
 Livre_s RechercherLivre(int& IDLivreRecherche);
 
 void AfficherLivre(int& IDLivreRecherche);

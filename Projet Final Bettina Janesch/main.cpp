@@ -78,6 +78,10 @@ void main(void)
 			Retour(IDClientRetour);
 			break;
 		case '6':
+			ListeDesLivresPretes();
+			cout << "\nAppuyez sur une touche pour continuer...";
+			OptionMenu = _getche();
+			system("cls");
 			break;
 		case '7':
 			ListeDesClientsEnRetard();

@@ -57,6 +57,31 @@ void NouveauLivre(string Titre, string Auteur)
 
 }
 
+static int CompterLivres()
+{
+	fstream Fichier;
+	Livre_s LivreCompte;
+	int NumeroLivres = 0;
+
+	Fichier.open(NOM_FICHIER_LIVRES, ios::in | ios::binary);
+
+	if (Fichier.fail()) {
+		cout << "Erreur ouverture !!";
+		exit(EXIT_FAILURE);
+	}
+
+	Fichier.read((char*)&LivreCompte, sizeof(Livre_s));
+
+	while (!Fichier.eof())
+	{
+		NumeroLivres++;
+		Fichier.read((char*)&LivreCompte, sizeof(Livre_s));
+	}
+
+	Fichier.close();
+	return NumeroLivres;
+}
+
 Livre_s RechercherLivre(int &IDLivreRecherche)
 {
 	Livre_s LivreTrouve;
@@ -139,6 +164,20 @@ void MettreAJourLivre(Livre_s LivreALouer, int& IDLivreRecherche)
 
 void ListeDesLivresPretes()
 {
+	Livre_s LivrePrete;
 
+	int NumeroLivres = CompterLivres();
 
+	cout << "\n\n\n\t+++ LIVRES PRETÉS +++\n\t------------\nID\tTitre\n------------------\n";
+
+	for (int i = 0; i < NumeroLivres; i++)
+	{
+		LivrePrete = RechercherLivre(i);
+
+		if (LivrePrete.EtatPret == true)
+		{
+			cout << LivrePrete.IDLivre << "\t" << LivrePrete.Titre << "\n";
+		}
+	}
 }
+
