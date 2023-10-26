@@ -96,7 +96,6 @@ static Client_s RechercherDossierClient(int &IDClientRecherche)
 {
 	Client_s ClientTrouve;
 	fstream Fichier;
-	bool Trouve = false;
 	Fichier.open(NOM_FICHIER_CLIENTS, ios::in | ios::binary);
 
 	if (Fichier.fail()) {
@@ -106,10 +105,12 @@ static Client_s RechercherDossierClient(int &IDClientRecherche)
 
 	Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 	
+	bool Trouve = false;
 	while (!Fichier.eof())
 	{
 		if (ClientTrouve.IDClient == IDClientRecherche)
 		{
+
 			Fichier.seekg(sizeof(Client_s) * ClientTrouve.IDClient, ios::beg);
 			Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 			Trouve = true;
@@ -123,7 +124,6 @@ static Client_s RechercherDossierClient(int &IDClientRecherche)
 	{
 		cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
 	}
-
 	Fichier.close();
 
 }
@@ -178,7 +178,6 @@ void ListeDesClientsEnRetard() // A REPARER
 {
 	Client_s ClientRetard;
 
-	bool Retard = false;
 	int NombreClients = CompterClients();
 
 	cout << "\n\n\n\t\t+++ CLIENTS AVEC DES PRETS EN RETARD +++\n------------------------------------------------------------------\n";
@@ -187,20 +186,25 @@ void ListeDesClientsEnRetard() // A REPARER
 
 	for (int i = 0; i < NombreClients; i++) //parcourir tous les clients 0 a x
 	{
-		ClientRetard = RechercherDossierClient(i);
+		ClientRetard = RechercherDossierClient(i); //client 0,1,2...
 
-		if (NombreJours(ClientRetard.Livres[ClientRetard.NumeroLivresPretes].Retour, Aujourdhui()) >= 1)
+		if (ClientRetard.NumeroLivresPretes >= 1) // if pour seulement si client a une livre preté au moins
 		{
-			Retard = true;
-		}
-
-		for (int i = 0; i < ClientRetard.NumeroLivresPretes; i++) // verifier si une des livres est en retard
-		{
-			if (Retard) // si retard existe  (diff entre date retour et ajd >=1)
+			for (int i = 0; i < ClientRetard.NumeroLivresPretes; i++) // verifier si une des livres est en retard
 			{
-				cout << "\n" << ClientRetard.NomClient << " ( " << ClientRetard.NumeroTelephone << " ) \t\t" << ClientRetard.Livres[i].Retour.Jour << "/";
-				cout << ClientRetard.Livres[i].Retour.Mois << "/" << ClientRetard.Livres[i].Retour.Annee <<"\t\t"<< NombreJours(ClientRetard.Livres[i].Retour, Aujourdhui())<<"\n";
-				Retard = false; // juste pour afficher 1 livre seulement
+				bool Retard = false;
+				if (NombreJours(ClientRetard.Livres[i].Retour, Aujourdhui()) >= 1) // ca verifie seulement 3eme livre though ? a verifier
+				{
+					Retard = true;
+				}
+
+
+				if (Retard) // si retard existe  (diff entre date retour et ajd >=1)
+				{
+					cout << "\n" << ClientRetard.NomClient << " ( " << ClientRetard.NumeroTelephone << " ) \t\t" << ClientRetard.Livres[i].Retour.Jour << "/";
+					cout << ClientRetard.Livres[i].Retour.Mois << "/" << ClientRetard.Livres[i].Retour.Annee << "\t\t" << NombreJours(ClientRetard.Livres[i].Retour, Aujourdhui()) << "\n";
+					Retard = false; // juste pour afficher 1 livre seulement
+				}
 			}
 		}
 	}
@@ -225,7 +229,6 @@ void Location(int& IDClientLoueur, int& IDLivreALouer)
 			// 1.2 modifier nombre de livres pretes
 		ClientLoueur.NumeroLivresPretes++;
 			
-
 		//2. changer infos livre
 		LivreALouer.EtatPret = true;
 
@@ -236,7 +239,7 @@ void Location(int& IDClientLoueur, int& IDLivreALouer)
 		cout << "Pret du livre enregistré.";
 	}
 
-	else if (ClientLoueur.NumeroLivresPretes >= 3 ) // donné 100 pour eviter d'avoir ce message en cas d'une structure vide du client/invalide
+	else if (ClientLoueur.NumeroLivresPretes >= 3 )
 	{
 		cout << "Maximum de locations (3) atteint, location de ce livre non permise.";
 	}

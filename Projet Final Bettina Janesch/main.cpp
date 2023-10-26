@@ -69,6 +69,8 @@ void main(void)
 			cin >> IDLivreALouer;
 			Location(IDClientLoueur, IDLivreALouer);
 			cout << "\nAppuyez sur une touche pour continuer...";
+			OptionMenu = _getche();
+			system("cls");
 			break;
 		case '5':
 			cout << "\n\n\n\nEntrez le numéro du client qui retourne tous ses livres: ";
