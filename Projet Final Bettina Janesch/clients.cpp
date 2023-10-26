@@ -7,6 +7,8 @@
 
 using namespace std;
 
+extern const string NOM_FICHIER_CLIENTS = ".\\fichiers\\clients.bin";
+
 struct LivresPretes_s
 {
 	int NumeroLivre;
@@ -17,28 +19,32 @@ struct LivresPretes_s
 struct Client_s
 {
 	int IDClient;
-	char NomClient[MAX_CHAR];
+	char NomClient[MAX_CHAR_CLIENTS];
 	char NumeroTelephone[10];
-	char Adresse[MAX_CHAR];
+	char Adresse[MAX_CHAR_CLIENTS];
 	Date_s DateInscription;
 	int NumeroLivresPretes; // max 3
 	LivresPretes_s Livres[3];
 };
 
+// prototypes fonctions privés
+
 static Client_s RechercherDossierClient(int& IDClientRecherche);
 
 static void MettreAJourClient(Client_s ClientLoueur, int& IDClientRecherche);
 
-extern const string NOM_FICHIER_CLIENTS = ".\\fichiers\\clients.bin";
+static int CompterClients();
+
+//fonctions client
 
 void NouveauClient(string Nom, string Telephone, string Addresse)
 {
 	fstream Fichier;
 	static int IDNouveauClient = 0;
 	Client_s NouveauClient;
-	char CharNom[MAX_CHAR];
+	char CharNom[MAX_CHAR_CLIENTS];
 	char CharTelephone[10];
-	char CharAddresse[MAX_CHAR];
+	char CharAddresse[MAX_CHAR_CLIENTS];
 
 
 	Fichier.open(NOM_FICHIER_CLIENTS, ios::app | ios::binary);
@@ -59,7 +65,7 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 	StringEnTabChar(Telephone, CharTelephone);
 	StringEnTabChar(Addresse, CharAddresse);
 
-	for (int i = 0; i < MAX_CHAR; i++)
+	for (int i = 0; i < MAX_CHAR_CLIENTS; i++)
 	{
 		NouveauClient.NomClient[i] = CharNom[i];
 	}
@@ -69,7 +75,7 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 		NouveauClient.NumeroTelephone[i] = CharTelephone[i];
 	}
 
-	for (int i = 0; i < MAX_CHAR; i++)
+	for (int i = 0; i < MAX_CHAR_CLIENTS; i++)
 	{
 		NouveauClient.Adresse[i] = CharAddresse[i];
 	}
@@ -89,7 +95,7 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 
 }
 
-static int CompterClients()
+static int CompterClients() // utilisé pour avoir le nombre de clients inscrits
 {
 	fstream Fichier;
 	Client_s ClientCompte;
@@ -142,33 +148,34 @@ static Client_s RechercherDossierClient(int &IDClientRecherche)
 		Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 	}
 
-	cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer..."; // code executé seulement si struct Client non-trouvable
+	cout << "\nNuméro de client invalide."; // code executé seulement si struct Client non-trouvable
 	Fichier.close();
 	return ClientInvalide;// return une struct vide de Client;
 }
 
-void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur rechercherclient
+void AfficherDossierClient(int &IDClientRecherche)
 {
 	Client_s LireClient;
 	LireClient = RechercherDossierClient(IDClientRecherche);
 
 	if (LireClient.IDClient == IDClientRecherche && LireClient.IDClient>=0)
 	{
-		cout << "\n\n\n+++ DOSSIER DU CLIENT +++\n------------\n";
+		cout << "\n\n\n+++ DOSSIER DU CLIENT +++\n--------------------------\n";
 
 		cout << "\nID Client: " << LireClient.IDClient << "\nNom client: " << LireClient.NomClient << "\nNuméro téléphone: " << LireClient.NumeroTelephone << "\nAddresse: " << LireClient.Adresse;
 		cout << "\nDate inscription: " << LireClient.DateInscription.Annee << "-" << LireClient.DateInscription.Mois << "-" << LireClient.DateInscription.Jour;
 		cout << "\nNombre de livres pretés: " << LireClient.NumeroLivresPretes;
+		
+		
 		//test:
+		//cout << "\nTEST:\n";
 
-		cout << "\nTEST:\n";
-
-		for (int i = 0; i < 3; i++)
-		{
-			cout << "Date pret : " << LireClient.Livres[i].Maintenant.Annee << LireClient.Livres[i].Maintenant.Mois << LireClient.Livres[i].Maintenant.Jour;
-			cout << "\nDate retour + 15: " << LireClient.Livres[i].Retour.Annee << LireClient.Livres[i].Retour.Mois << LireClient.Livres[i].Retour.Jour << "\nNuméro livre: ";
-			cout << LireClient.Livres[i].NumeroLivre << "\n\n";
-		}
+		//for (int i = 0; i < 3; i++)
+		//{
+		//	cout << "Date pret : " << LireClient.Livres[i].Maintenant.Annee << LireClient.Livres[i].Maintenant.Mois << LireClient.Livres[i].Maintenant.Jour;
+		//	cout << "\nDate retour + 15: " << LireClient.Livres[i].Retour.Annee << LireClient.Livres[i].Retour.Mois << LireClient.Livres[i].Retour.Jour << "\nNuméro livre: ";
+		//	cout << LireClient.Livres[i].NumeroLivre << "\n\n";
+		//}
 	}
 }
 
@@ -201,16 +208,16 @@ void ListeDesClientsEnRetard() // A REPARER
 	cout << "Nom (Téléphone)\t\tDate de retour prévue\tJours de retard";
 	cout << "\n------------------------------------------------------------------\n";
 
-	for (int i = 0; i < NombreClients; i++) //parcourir tous les clients 0 a x
+	for (int j = 0; j < NombreClients; j++) //parcourir tous les clients 0 a x
 	{
-		ClientRetard = RechercherDossierClient(i); //client 0,1,2...
+		ClientRetard = RechercherDossierClient(j); //client 0,1,2...
 
 		if (ClientRetard.NumeroLivresPretes >= 1) // if pour seulement si client a une livre preté au moins
 		{
-			for (int i = 0; i < ClientRetard.NumeroLivresPretes; i++) // verifier si une des livres est en retard
+			for (int i = 0; i < ClientRetard.NumeroLivresPretes; i++)
 			{
 				bool Retard = false;
-				if (NombreJours(ClientRetard.Livres[i].Retour, Aujourdhui()) >= 1) // ca verifie seulement 3eme livre though ? a verifier
+				if (NombreJours(ClientRetard.Livres[i].Retour, Aujourdhui()) >= 1) // verifier si une des livres est en retard
 				{
 					Retard = true;
 				}
@@ -222,12 +229,29 @@ void ListeDesClientsEnRetard() // A REPARER
 					cout << ClientRetard.Livres[i].Retour.Mois << "/" << ClientRetard.Livres[i].Retour.Annee << "\t\t" << NombreJours(ClientRetard.Livres[i].Retour, Aujourdhui()) << "\n";
 					Retard = false; // juste pour afficher 1 livre seulement
 				}
+				else if (!Retard)
+				{
+					if (j == 0 && i==0) // pour que ca affiche seulement 1 fois
+					{
+						cout << "Aucun client est en retard présentement.";
+					}
+					
+				}
 			}
 		}
+		else if (ClientRetard.NumeroLivresPretes == 0)
+		{
+			if (j == 0) // pour que ca affiche seulement 1 fois
+		{
+			cout << "Aucun client a des livres loués.";
+		}
+			
+		}
+
 	}
 } 
 
-void Location(int& IDClientLoueur, int& IDLivreALouer) // faire fonction pour si client vide, erreur
+void Location(int& IDClientLoueur, int& IDLivreALouer)
 {
 	Client_s ClientLoueur;
 	Livre_s LivreALouer;
@@ -235,7 +259,7 @@ void Location(int& IDClientLoueur, int& IDLivreALouer) // faire fonction pour si
 	ClientLoueur = RechercherDossierClient(IDClientLoueur);
 	LivreALouer = RechercherLivre(IDLivreALouer);
 
-	if (ClientLoueur.NumeroLivresPretes < 3)
+	if (ClientLoueur.NumeroLivresPretes < 3 && ClientLoueur.NumeroLivresPretes >= 0) // 2eme condition pour qu'une structure vide rentrera pas dans le bloc de code
 	{
 		//1. changer infos client
 		//1.1. Numero livre loué + date aujourdhui + date retour
@@ -252,7 +276,6 @@ void Location(int& IDClientLoueur, int& IDLivreALouer) // faire fonction pour si
 		//3. push structs dans les fichiers
 		MettreAJourClient(ClientLoueur, IDClientLoueur);
 		MettreAJourLivre(LivreALouer, IDLivreALouer);
-
 		cout << "Pret du livre enregistré.";
 	}
 
@@ -269,36 +292,42 @@ void Retour(int& IDClientLoueur)
 
 	ClientLoueur = RechercherDossierClient(IDClientLoueur);
 
-	if (ClientLoueur.NumeroLivresPretes >= 1)
+	if (ClientLoueur.IDClient == IDClientLoueur)
 	{
-		for (int i = 0; i < ClientLoueur.NumeroLivresPretes; i++)
+		if (ClientLoueur.NumeroLivresPretes >= 1)
 		{
-			//2. changer infos livre // 
-			LivreARetourner = RechercherLivre(ClientLoueur.Livres[i].NumeroLivre);
-			LivreARetourner.EtatPret = false;
-			MettreAJourLivre(LivreARetourner, ClientLoueur.Livres[i].NumeroLivre);
+			for (int i = 0; i < ClientLoueur.NumeroLivresPretes; i++)
+			{
+				//2. changer infos livre // 
+				LivreARetourner = RechercherLivre(ClientLoueur.Livres[i].NumeroLivre);
+				LivreARetourner.EtatPret = false;
+				MettreAJourLivre(LivreARetourner, ClientLoueur.Livres[i].NumeroLivre);
 
-			//tableau a zero MARCHE PAS
+				//tableau a zero MARCHE PAS
 
-			ClientLoueur.Livres[i].Maintenant = { 0,0,0 };
-			ClientLoueur.Livres[i].NumeroLivre = -1;
-			ClientLoueur.Livres[i].Retour = { 0,0,0 };
+				ClientLoueur.Livres[i].Maintenant = { 0,0,0 };
+				ClientLoueur.Livres[i].NumeroLivre = -1;
+				ClientLoueur.Livres[i].Retour = { 0,0,0 };
 
-			//3. push structs dans les fichiers
+				//3. push structs dans les fichiers
+				MettreAJourClient(ClientLoueur, IDClientLoueur);
+
+			}
+			ClientLoueur.NumeroLivresPretes = 0;
 			MettreAJourClient(ClientLoueur, IDClientLoueur);
-
+			cout << "Retour des livres enregistré.";
 		}
-		ClientLoueur.NumeroLivresPretes = 0;
-		MettreAJourClient(ClientLoueur, IDClientLoueur);
-	}
 
-	else if (ClientLoueur.NumeroLivresPretes < 1)
-	{
-		cout << "Erreur. Client n'a pas des livres à retourner";
+		else if (ClientLoueur.NumeroLivresPretes < 1)
+		{
+			cout << "Erreur. Client n'a pas des livres à retourner";
+		}
+
 	}
+	
 }
 
-void MettreClientEnRetard(int Client, int Livre)
+void MettreClientEnRetard(int Client, int Livre) // fonction test
 {
 	Client_s ClientRetard;
 	Livre_s LivreRetard;

@@ -7,11 +7,11 @@ using namespace std;
 
 extern const string NOM_FICHIER_LIVRES = ".\\fichiers\\livres.bin";
 
-//maison: "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\livres.bin";
+// prototypes fonctions privés
 
-// ecole: "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\livres.bin";
+static int CompterLivres();
 
-// location / prêt d’un livre implique des données pour le client ET pour le livre!!!!
+// fonctions livres
 
 void NouveauLivre(string Titre, string Auteur)
 {
@@ -52,12 +52,13 @@ void NouveauLivre(string Titre, string Auteur)
 	NouveauLivre.EtatPret = false;
 
 	Fichier.write((char*)&NouveauLivre, sizeof(Livre_s));
+	cout << "Livre ajouté avec succès.";
 
 	Fichier.close();
 
 }
 
-static int CompterLivres()
+static int CompterLivres() // utilisé pour avoir le nombre de livres dans le fichier
 {
 	fstream Fichier;
 	Livre_s LivreCompte;
@@ -116,7 +117,7 @@ Livre_s RechercherLivre(int &IDLivreRecherche)
 
 }
 
-void AfficherLivre(int& IDLivreRecherche)
+void AfficherLivre(int& IDLivreRecherche) // fonction pas nécessaire? laissé pour tester seulement
 {
 	Livre_s LireLivre;
 	LireLivre = RechercherLivre(IDLivreRecherche);
@@ -168,7 +169,7 @@ void ListeDesLivresPretes()
 
 	int NumeroLivres = CompterLivres();
 
-	cout << "\n\n\n\t+++ LIVRES PRETÉS +++\n\t------------\nID\tTitre\n------------------\n";
+	cout << "\n\n\n\t+++ LIVRES PRETÉS +++\n-------------------------------\nID\tTitre\n-------------------------------\n";
 
 	for (int i = 0; i < NumeroLivres; i++)
 	{
