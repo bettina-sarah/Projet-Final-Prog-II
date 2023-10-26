@@ -9,10 +9,6 @@ using namespace std;
 
 extern const string NOM_FICHIER_CLIENTS = ".\\fichiers\\clients.bin";
 
-//maison: "C:\\Users\\betti\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
-
-//ecole: "C:\\Users\\1649508\\source\\repos\\Projet-Final-Prog-II\\Projet Final Bettina Janesch\\fichiers\\clients.bin";
-
 void NouveauClient(string Nom, string Telephone, string Addresse)
 {
 	fstream Fichier;
@@ -32,7 +28,7 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 
 	// assign numero client au struct + incrementation
 
-	NouveauClient.IDClient = IDNouveauClient; // marche pas ????
+	NouveauClient.IDClient = IDNouveauClient;
 	IDNouveauClient++;
 
 	//string en tab char + mettre dans structure
@@ -65,6 +61,7 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 	//besoin de faire qq chose au tableau de livres? deja zero techniquement
 	
 	Fichier.write((char*)&NouveauClient, sizeof(Client_s));
+	cout << "Client ajouté avec succès.\nAppuyez sur une touche pour continuer...";
 
 	Fichier.close();
 
@@ -184,7 +181,11 @@ void ListeDesClientsEnRetard() // A REPARER
 	bool Retard = false;
 	int NombreClients = CompterClients();
 
-	for (int i = 0; i < NombreClients; i++) //parcourir tous les clients A REPARER while(eof) sans fonc rechercher et juste parcourir dans fichier a place?
+	cout << "\n\n\n\t\t+++ CLIENTS AVEC DES PRETS EN RETARD +++\n------------------------------------------------------------------\n";
+	cout << "Nom (Téléphone)\t\tDate de retour prévue\tJours de retard";
+	cout << "\n------------------------------------------------------------------\n";
+
+	for (int i = 0; i < NombreClients; i++) //parcourir tous les clients 0 a x
 	{
 		ClientRetard = RechercherDossierClient(i);
 
@@ -197,11 +198,8 @@ void ListeDesClientsEnRetard() // A REPARER
 		{
 			if (Retard) // si retard existe  (diff entre date retour et ajd >=1)
 			{
-				cout << "\n\n\n+++ CLIENTS AVEC DES PRETS EN RETARD +++\n------------\n";
-				cout << "Nom (Téléphone)\t\tDate de retour prévue\tJours de retard";
-				cout << "\n-----------------------------------------\n";
-				cout << "\n" << ClientRetard.NomClient << " ( " << ClientRetard.NumeroTelephone << "\t" << ClientRetard.Livres[i].Retour.Jour << "/";
-				cout << ClientRetard.Livres[i].Retour.Mois << "/" << ClientRetard.Livres[i].Retour.Annee << NombreJours(ClientRetard.Livres[i].Retour, Aujourdhui());
+				cout << "\n" << ClientRetard.NomClient << " ( " << ClientRetard.NumeroTelephone << " ) \t\t" << ClientRetard.Livres[i].Retour.Jour << "/";
+				cout << ClientRetard.Livres[i].Retour.Mois << "/" << ClientRetard.Livres[i].Retour.Annee <<"\t\t"<< NombreJours(ClientRetard.Livres[i].Retour, Aujourdhui())<<"\n";
 				Retard = false; // juste pour afficher 1 livre seulement
 			}
 		}

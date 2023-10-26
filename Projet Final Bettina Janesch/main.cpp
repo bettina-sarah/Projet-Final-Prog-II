@@ -7,8 +7,6 @@
 
 using namespace std;
 
-const string Bibliotheque = "Bibliothèque de la MRC St-Clin-de-banlieue";
-
 void main(void)
 {
 	setlocale(LC_CTYPE, "fr-CA");
@@ -27,7 +25,7 @@ void main(void)
 	do
 	{
 		cout << "\t********\n";
-		cout << Bibliotheque;
+		cout << "Bibliothèque de la MRC St-Clin-de-banlieue";
 		cout << "\n\t********\n";
 		cout << "\n\n****** MENU ******\n\t1. Nouveau livre\n\t2. Nouveau client\n\t3. Dossier du client\n\t4. Location de livre"
 			"\n\t5. Retour des livres\n\t6. Liste des livres prêtés\n\t7. Liste des clients en retard\n\t8. Quitter";
@@ -54,8 +52,6 @@ void main(void)
 			cout << "\nEntrez l'adresse du client: ";
 			getline(cin, Addresse);
 			NouveauClient(NomClient, NumeroTelephone, Addresse);
-
-			cout << "Client ajouté avec succès.\nAppuyez sur une touche pour continuer...";
 			OptionMenu = _getche();
 			system("cls");
 			break;
@@ -83,6 +79,7 @@ void main(void)
 			break;
 		case '7':
 			ListeDesClientsEnRetard();
+			system("cls");
 			break;
 		case '8':
 			system("cls");
