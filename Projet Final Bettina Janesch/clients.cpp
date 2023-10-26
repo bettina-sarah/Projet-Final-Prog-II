@@ -117,7 +117,7 @@ static int CompterClients()
 static Client_s RechercherDossierClient(int &IDClientRecherche)
 {
 	Client_s ClientTrouve;
-	Client_s ClientInvalide = { 0, {' '},{' '},{' '}, {0,0,0} ,0 ,{0,{0,0,0},{0,0,0}} };
+	Client_s ClientInvalide = { -1, {' '},{' '},{' '}, {0,0,0} ,-1 ,{0,{0,0,0},{0,0,0}} };
 	fstream Fichier;
 	Fichier.open(NOM_FICHIER_CLIENTS, ios::in | ios::binary);
 
@@ -128,27 +128,23 @@ static Client_s RechercherDossierClient(int &IDClientRecherche)
 
 	Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 	
-	bool Trouve = false;
 	while (!Fichier.eof())
 	{
-		if (ClientTrouve.IDClient == IDClientRecherche)
+		if (ClientTrouve.IDClient == IDClientRecherche && ClientTrouve.IDClient >=0)
 		{
 
 			Fichier.seekg(sizeof(Client_s) * ClientTrouve.IDClient, ios::beg);
 			Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
-			Trouve = true;
+			Fichier.close();
 			return ClientTrouve;
 		}
 
 		Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 	}
 
-	if (!Trouve && ClientTrouve.IDClient < IDClientRecherche)
-	{
-		cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
-		return ClientInvalide;// return une struct vide de Client;
-	}
+	cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer..."; // code executé seulement si struct Client non-trouvable
 	Fichier.close();
+	return ClientInvalide;// return une struct vide de Client;
 }
 
 void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur rechercherclient
@@ -156,7 +152,7 @@ void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur
 	Client_s LireClient;
 	LireClient = RechercherDossierClient(IDClientRecherche);
 
-	if (LireClient.IDClient == IDClientRecherche)
+	if (LireClient.IDClient == IDClientRecherche && LireClient.IDClient>=0)
 	{
 		cout << "\n\n\n+++ DOSSIER DU CLIENT +++\n------------\n";
 
@@ -173,9 +169,7 @@ void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur
 			cout << "\nDate retour + 15: " << LireClient.Livres[i].Retour.Annee << LireClient.Livres[i].Retour.Mois << LireClient.Livres[i].Retour.Jour << "\nNuméro livre: ";
 			cout << LireClient.Livres[i].NumeroLivre << "\n\n";
 		}
-
 	}
-
 }
 
 static void MettreAJourClient(Client_s ClientLoueur, int &IDClientRecherche)
@@ -233,7 +227,7 @@ void ListeDesClientsEnRetard() // A REPARER
 	}
 } 
 
-void Location(int& IDClientLoueur, int& IDLivreALouer)
+void Location(int& IDClientLoueur, int& IDLivreALouer) // faire fonction pour si client vide, erreur
 {
 	Client_s ClientLoueur;
 	Livre_s LivreALouer;
