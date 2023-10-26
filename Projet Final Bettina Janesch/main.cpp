@@ -29,7 +29,7 @@ void main(void)
 		cout << "\n****************************************************\n";
 		cout << "\n\n****** MENU ******\n\t1. Nouveau livre\n\t2. Nouveau client\n\t3. Dossier du client\n\t4. Location de livre"
 			"\n\t5. Retour des livres\n\t6. Liste des livres prêtés\n\t7. Liste des clients en retard\n\t8. Quitter";
-		//cout << "\n9. Afficher Livre (extra)\n*. Mettre un client en retard\n";    // pour tester
+		cout << "\n9. Afficher Livre (extra)\n*. Mettre un client en retard\n";    // pour tester
 		OptionMenu = _getche();
 		switch(OptionMenu)
 		{
@@ -98,20 +98,20 @@ void main(void)
 			system("cls");
 			_getch();
 			break;
-		// OPTIONS TEST:
-		//case '9':
-		//	cout << "\n\n\n\nEntrez le numéro du livre à afficher: "; // option menu pour tester seulement
-		//	cin >> IDLivre;
-		//	//IDLivre = _getche();
-		//	AfficherLivre(IDLivre);
-		//	break;
-		//case '*':
-		//	cout << "\n\n\n\nEntrez le numéro du client à mettre en retard: "; // option menu pour tester seulement
-		//	cin >> IDClient;
-		//	cout << "\nEntrez le livre a mettre en retard";
-		//	cin >> IDLivre;
-		//	MettreClientEnRetard(IDClient, IDLivre);
-		//	break;
+		 //OPTIONS TEST:
+		case '9':
+			cout << "\n\n\n\nEntrez le numéro du livre à afficher: "; // option menu pour tester seulement
+			cin >> IDLivre;
+			//IDLivre = _getche();
+			AfficherLivre(IDLivre);
+			break;
+		case '*':
+			cout << "\n\n\n\nEntrez le numéro du client à mettre en retard: "; // option menu pour tester seulement
+			cin >> IDClient;
+			cout << "\nEntrez le livre a mettre en retard";
+			cin >> IDLivre;
+			MettreClientEnRetard(IDClient, IDLivre);
+			break;
 		} 
 	}
 	while (OptionMenu != '8');

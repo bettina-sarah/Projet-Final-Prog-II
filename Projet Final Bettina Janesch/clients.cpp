@@ -42,10 +42,6 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 	fstream Fichier;
 	static int IDNouveauClient = 0;
 	Client_s NouveauClient;
-	char CharNom[MAX_CHAR_CLIENTS];
-	char CharTelephone[10];
-	char CharAddresse[MAX_CHAR_CLIENTS];
-
 
 	Fichier.open(NOM_FICHIER_CLIENTS, ios::app | ios::binary);
 
@@ -59,26 +55,11 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 	NouveauClient.IDClient = IDNouveauClient;
 	IDNouveauClient++;
 
-	//string en tab char + mettre dans structure
+	//string en tab char
 
-	StringEnTabChar(Nom, CharNom);
-	StringEnTabChar(Telephone, CharTelephone);
-	StringEnTabChar(Addresse, CharAddresse);
-
-	for (int i = 0; i < MAX_CHAR_CLIENTS; i++)
-	{
-		NouveauClient.NomClient[i] = CharNom[i];
-	}
-
-	for (int i = 0; i < 10; i++)
-	{
-		NouveauClient.NumeroTelephone[i] = CharTelephone[i];
-	}
-
-	for (int i = 0; i < MAX_CHAR_CLIENTS; i++)
-	{
-		NouveauClient.Adresse[i] = CharAddresse[i];
-	}
+	StringEnTabChar(Nom, NouveauClient.NomClient);
+	StringEnTabChar(Telephone, NouveauClient.NumeroTelephone);
+	StringEnTabChar(Addresse, NouveauClient.Adresse);
 
 	// Date Inscription dans struct
 
@@ -259,7 +240,7 @@ void Location(int& IDClientLoueur, int& IDLivreALouer)
 	ClientLoueur = RechercherDossierClient(IDClientLoueur);
 	LivreALouer = RechercherLivre(IDLivreALouer);
 
-	if (ClientLoueur.NumeroLivresPretes < 3 && ClientLoueur.NumeroLivresPretes >= 0) // 2eme condition pour qu'une structure vide rentrera pas dans le bloc de code
+	if (ClientLoueur.NumeroLivresPretes < 3 && ClientLoueur.NumeroLivresPretes >= 0 && LivreALouer.IDLivre == IDLivreALouer) // 2eme condition pour qu'une structure vide rentrera pas dans le bloc de code
 	{
 		//1. changer infos client
 		//1.1. Numero livre loué + date aujourdhui + date retour
@@ -322,9 +303,7 @@ void Retour(int& IDClientLoueur)
 		{
 			cout << "Erreur. Client n'a pas des livres à retourner";
 		}
-
 	}
-	
 }
 
 void MettreClientEnRetard(int Client, int Livre) // fonction test

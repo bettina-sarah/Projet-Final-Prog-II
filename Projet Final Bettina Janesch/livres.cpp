@@ -18,8 +18,6 @@ void NouveauLivre(string Titre, string Auteur)
 	fstream Fichier;
 	static int IDNouveauLivre = 0;
 	Livre_s NouveauLivre;
-	char CharTitre[MAX_CHAR_LIVRES];
-	char CharAuteur[MAX_CHAR_LIVRES];
 
 	Fichier.open(NOM_FICHIER_LIVRES, ios::app | ios::binary);
 
@@ -35,18 +33,8 @@ void NouveauLivre(string Titre, string Auteur)
 
 	//string en tab char + mettre dans structure
 
-	StringEnTabChar(Titre, CharTitre);
-	StringEnTabChar(Auteur, CharAuteur);
-
-	for (int i = 0; i < MAX_CHAR_LIVRES; i++)
-	{
-		NouveauLivre.Titre[i] = CharTitre[i];
-	}
-
-	for (int i = 0; i < 10; i++)
-	{
-		NouveauLivre.Auteur[i] = CharAuteur[i];
-	}
+	StringEnTabChar(Titre, NouveauLivre.Titre);
+	StringEnTabChar(Auteur, NouveauLivre.Auteur);
 
 	// bool prêt = faux
 	NouveauLivre.EtatPret = false;
@@ -110,11 +98,9 @@ Livre_s RechercherLivre(int &IDLivreRecherche)
 
 	if (LivreTrouve.IDLivre < IDLivreRecherche || LivreTrouve.IDLivre != IDLivreRecherche)
 	{
-		cout << "Numéro de livre invalide.\nAppuyez sur une touche pour continuer...";
+		cout << "Numéro de livre invalide.\nAppuyez sur une touche pour continuer...\n";
 	}
-
 	Fichier.close();
-
 }
 
 void AfficherLivre(int& IDLivreRecherche) // fonction pas nécessaire? laissé pour tester seulement
@@ -137,12 +123,6 @@ void AfficherLivre(int& IDLivreRecherche) // fonction pas nécessaire? laissé pou
 			cout << "loué";
 		}
 	}
-
-	else if (LireLivre.IDLivre < IDLivreRecherche || LireLivre.IDLivre != IDLivreRecherche)
-	{
-		cout << "Numéro de livre invalide.\nAppuyez sur une touche pour continuer...";
-	}
-
 }
 
 void MettreAJourLivre(Livre_s LivreALouer, int& IDLivreRecherche)
