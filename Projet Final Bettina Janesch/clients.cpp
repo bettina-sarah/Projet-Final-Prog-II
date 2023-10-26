@@ -70,11 +70,36 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 
 }
 
+int CompterClients()
+{
+	fstream Fichier;
+	Client_s ClientCompte;
+	int NumeroClients = 0;
+
+	Fichier.open(NOM_FICHIER_CLIENTS, ios::in | ios::binary);
+
+	if (Fichier.fail()) {
+		cout << "Erreur ouverture !!";
+		exit(EXIT_FAILURE);
+	}
+
+	Fichier.read((char*)&ClientCompte, sizeof(Client_s));
+
+	while (!Fichier.eof())
+	{
+		NumeroClients++;
+		Fichier.read((char*)&ClientCompte, sizeof(Client_s));
+	}
+
+	Fichier.close();
+	return NumeroClients;
+}
+
 static Client_s RechercherDossierClient(int &IDClientRecherche)
 {
 	Client_s ClientTrouve;
-
 	fstream Fichier;
+	bool Trouve = false;
 	Fichier.open(NOM_FICHIER_CLIENTS, ios::in | ios::binary);
 
 	if (Fichier.fail()) {
@@ -90,13 +115,14 @@ static Client_s RechercherDossierClient(int &IDClientRecherche)
 		{
 			Fichier.seekg(sizeof(Client_s) * ClientTrouve.IDClient, ios::beg);
 			Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
+			Trouve = true;
 			return ClientTrouve;
 		}
 
 		Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 	}
 
-	if (ClientTrouve.IDClient < IDClientRecherche || ClientTrouve.IDClient != IDClientRecherche)
+	if (!Trouve)
 	{
 		cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
 	}
@@ -130,11 +156,6 @@ void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur
 
 	}
 
-	else if (LireClient.IDClient < IDClientRecherche || LireClient.IDClient != IDClientRecherche)
-	{
-		cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
-	}
-
 }
 
 static void MettreAJourClient(Client_s ClientLoueur, int &IDClientRecherche)
@@ -161,8 +182,9 @@ void ListeDesClientsEnRetard() // A REPARER
 	Client_s ClientRetard;
 
 	bool Retard = false;
+	int NombreClients = CompterClients();
 
-	for (int i = 0; i < 9; i++) //parcourir tous les clients A REPARER while(eof) sans fonc rechercher et juste parcourir dans fichier a place?
+	for (int i = 0; i < NombreClients; i++) //parcourir tous les clients A REPARER while(eof) sans fonc rechercher et juste parcourir dans fichier a place?
 	{
 		ClientRetard = RechercherDossierClient(i);
 
@@ -182,16 +204,9 @@ void ListeDesClientsEnRetard() // A REPARER
 				cout << ClientRetard.Livres[i].Retour.Mois << "/" << ClientRetard.Livres[i].Retour.Annee << NombreJours(ClientRetard.Livres[i].Retour, Aujourdhui());
 				Retard = false; // juste pour afficher 1 livre seulement
 			}
-
 		}
-
-		
-
 	}
-
 } 
-
-
 
 void Location(int& IDClientLoueur, int& IDLivreALouer)
 {
@@ -232,32 +247,31 @@ void Location(int& IDClientLoueur, int& IDLivreALouer)
 void Retour(int& IDClientLoueur)
 {
 	Client_s ClientLoueur;
-	Livre_s LivreALouer;
+	Livre_s LivreARetourner;
 
 	ClientLoueur = RechercherDossierClient(IDClientLoueur);
 
+	LivresPretes_s NouveauTableau[3];
+
 	for (int i = 0; i < ClientLoueur.NumeroLivresPretes; i++)
 	{
-		//1.2 
-		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].NumeroLivre = {};
-		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].Maintenant = {};
-		ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].Retour = {};
+		//2. changer infos livre // 
+		LivreARetourner = RechercherLivre(ClientLoueur.Livres[i].NumeroLivre);
+		LivreARetourner.EtatPret = false;
+		MettreAJourLivre(LivreARetourner, ClientLoueur.Livres[i].NumeroLivre);
 
+		//tableau a zero MARCHE PAS
 
-		//2. changer infos livre
-		LivreALouer.EtatPret = false;
+		ClientLoueur.Livres[i].Maintenant = NouveauTableau[i].Maintenant;
+		ClientLoueur.Livres[i].NumeroLivre = NouveauTableau[i].NumeroLivre;
+		ClientLoueur.Livres[i].Retour = NouveauTableau[i].Retour;
 
 		//3. push structs dans les fichiers
 		MettreAJourClient(ClientLoueur, IDClientLoueur);
-		MettreAJourLivre(LivreALouer, ClientLoueur.Livres[ClientLoueur.NumeroLivresPretes].NumeroLivre);
 
 	}
-
-	// 1.1 modifier nombre de livres pretes a zero apres le loop
-
 	ClientLoueur.NumeroLivresPretes = 0;
 	MettreAJourClient(ClientLoueur, IDClientLoueur);
-
 
 //Si le client est en retard, on retourne le nombre de jours de retard.Vous pouvez calculer le nombre de jours grâce à la fonction NombreJours.
 //La fonction NombreJours(Date_s Date1, Date_s Date_2) retourne un int qui correspond au nombre de jours de Date2 – Date 1. 

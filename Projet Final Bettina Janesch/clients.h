@@ -27,6 +27,8 @@ struct Client_s
 
 void NouveauClient(string Nom, string Telephone, string Addresse);
 
+int CompterClients();
+
 static Client_s RechercherDossierClient(int &IDClientRecherche);
 
 void AfficherDossierClient(int &IDClientRecherche);

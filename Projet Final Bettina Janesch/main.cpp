@@ -31,7 +31,7 @@ void main(void)
 		cout << "\n\t********\n";
 		cout << "\n\n****** MENU ******\n\t1. Nouveau livre\n\t2. Nouveau client\n\t3. Dossier du client\n\t4. Location de livre"
 			"\n\t5. Retour des livres\n\t6. Liste des livres prêtés\n\t7. Liste des clients en retard\n\t8. Quitter";
-		cout << "\n9. Afficher Livre (extra)\n*. Mettre un client en retard";// pour tester
+		cout << "\n9. Afficher Livre (extra)\n*. Mettre un client en retard\n$.Compter clients";// pour tester
 		OptionMenu = _getche();
 		switch(OptionMenu)
 		{
@@ -100,6 +100,9 @@ void main(void)
 			cout << "\nEntrez le livre a mettre en retard";
 			cin >> IDLivre;
 			MettreClientEnRetard(IDClient, IDLivre);
+			break;
+		case '$':
+			cout << CompterClients();
 			break;
 		} 
 	}
