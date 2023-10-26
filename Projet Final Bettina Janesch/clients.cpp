@@ -7,6 +7,28 @@
 
 using namespace std;
 
+struct LivresPretes_s
+{
+	int NumeroLivre;
+	Date_s Maintenant;
+	Date_s Retour;
+};
+
+struct Client_s
+{
+	int IDClient;
+	char NomClient[MAX_CHAR];
+	char NumeroTelephone[10];
+	char Adresse[MAX_CHAR];
+	Date_s DateInscription;
+	int NumeroLivresPretes; // max 3
+	LivresPretes_s Livres[3];
+};
+
+static Client_s RechercherDossierClient(int& IDClientRecherche);
+
+static void MettreAJourClient(Client_s ClientLoueur, int& IDClientRecherche);
+
 extern const string NOM_FICHIER_CLIENTS = ".\\fichiers\\clients.bin";
 
 void NouveauClient(string Nom, string Telephone, string Addresse)
@@ -67,7 +89,7 @@ void NouveauClient(string Nom, string Telephone, string Addresse)
 
 }
 
-int CompterClients()
+static int CompterClients()
 {
 	fstream Fichier;
 	Client_s ClientCompte;
@@ -95,6 +117,7 @@ int CompterClients()
 static Client_s RechercherDossierClient(int &IDClientRecherche)
 {
 	Client_s ClientTrouve;
+	Client_s ClientInvalide = { 0, {' '},{' '},{' '}, {0,0,0} ,0 ,{0,{0,0,0},{0,0,0}} };
 	fstream Fichier;
 	Fichier.open(NOM_FICHIER_CLIENTS, ios::in | ios::binary);
 
@@ -120,12 +143,12 @@ static Client_s RechercherDossierClient(int &IDClientRecherche)
 		Fichier.read((char*)&ClientTrouve, sizeof(Client_s));
 	}
 
-	if (!Trouve)
+	if (!Trouve && ClientTrouve.IDClient < IDClientRecherche)
 	{
 		cout << "Numéro de client invalide.\nAppuyez sur une touche pour continuer...";
+		return ClientInvalide;// return une struct vide de Client;
 	}
 	Fichier.close();
-
 }
 
 void AfficherDossierClient(int &IDClientRecherche) // pas bon faut quil loop sur rechercherclient
@@ -252,31 +275,33 @@ void Retour(int& IDClientLoueur)
 
 	ClientLoueur = RechercherDossierClient(IDClientLoueur);
 
-	LivresPretes_s NouveauTableau[3];
-
-	for (int i = 0; i < ClientLoueur.NumeroLivresPretes; i++)
+	if (ClientLoueur.NumeroLivresPretes >= 1)
 	{
-		//2. changer infos livre // 
-		LivreARetourner = RechercherLivre(ClientLoueur.Livres[i].NumeroLivre);
-		LivreARetourner.EtatPret = false;
-		MettreAJourLivre(LivreARetourner, ClientLoueur.Livres[i].NumeroLivre);
+		for (int i = 0; i < ClientLoueur.NumeroLivresPretes; i++)
+		{
+			//2. changer infos livre // 
+			LivreARetourner = RechercherLivre(ClientLoueur.Livres[i].NumeroLivre);
+			LivreARetourner.EtatPret = false;
+			MettreAJourLivre(LivreARetourner, ClientLoueur.Livres[i].NumeroLivre);
 
-		//tableau a zero MARCHE PAS
+			//tableau a zero MARCHE PAS
 
-		ClientLoueur.Livres[i].Maintenant = NouveauTableau[i].Maintenant;
-		ClientLoueur.Livres[i].NumeroLivre = NouveauTableau[i].NumeroLivre;
-		ClientLoueur.Livres[i].Retour = NouveauTableau[i].Retour;
+			ClientLoueur.Livres[i].Maintenant = { 0,0,0 };
+			ClientLoueur.Livres[i].NumeroLivre = -1;
+			ClientLoueur.Livres[i].Retour = { 0,0,0 };
 
-		//3. push structs dans les fichiers
+			//3. push structs dans les fichiers
+			MettreAJourClient(ClientLoueur, IDClientLoueur);
+
+		}
+		ClientLoueur.NumeroLivresPretes = 0;
 		MettreAJourClient(ClientLoueur, IDClientLoueur);
-
 	}
-	ClientLoueur.NumeroLivresPretes = 0;
-	MettreAJourClient(ClientLoueur, IDClientLoueur);
 
-//Si le client est en retard, on retourne le nombre de jours de retard.Vous pouvez calculer le nombre de jours grâce à la fonction NombreJours.
-//La fonction NombreJours(Date_s Date1, Date_s Date_2) retourne un int qui correspond au nombre de jours de Date2 – Date 1. 
-//Cette fonction est utile pour vérifier le nombre de jours de retard d’un livre.
+	else if (ClientLoueur.NumeroLivresPretes < 1)
+	{
+		cout << "Erreur. Client n'a pas des livres à retourner";
+	}
 }
 
 void MettreClientEnRetard(int Client, int Livre)
